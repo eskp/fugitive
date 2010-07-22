@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 <html dir="ltr" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>p4bl0's blog: <!--article_title--></title>
+    <title>p4bl0's blog: <?fugitive article_title ?></title>
     <meta http-equiv="Content-type" content="application/xhtml+xml; charset=utf-8" />
     <meta name="author" content="Pablo Rauzy" />
     <meta name="description" content="p4bl0 (Pablo Rauzy)'s blog" />
     <meta name="keywords" content="p4bl0, pablo, rauzy, blog, geek, student, ens, normale sup, computer science, programming, language" />
     <link rel="icon" type="image/png" href="/images/icons/pablo.png" />
-    <link rel="stylesheet" href="/styles/fugitive.css" type="text/css" media="screen" charset="utf-8" /> 
+    <link rel="stylesheet" href="fugitive.css" type="text/css" media="screen" charset="utf-8" /> 
   </head>
 
   <body>
@@ -26,16 +26,17 @@
       <div id="content">
         <article>
           <header>
-            <h2><!--article_title--></h2>
+            <h2><?fugitive article_title ?></h2>
           </header>
           <footer>
-            by <!--commit_author-->, on
-            <time datetime="<!--commit_datetime-->"><!--commit_date--> at
-              <!--commit_time--></time>.
+            by <?fugitive commit_author ?>, on
+            <time datetime="<?fugitive commit_datetime ?>">
+              <?fugitive commit_date ?> at
+              <?fugitive commit_time ?></time>.
           </footer>
           </header>
           <div>
-            <!--article_content-->
+            <?fugitive article_content ?>
           </div>
         </article>
       </div>
@@ -50,9 +51,9 @@
           hosted at <a href="http://berthold.shebang.ws/">berthold</a>'s
         </p>
         <p>
-          last commit was <!--commit_hash-->,
-          at <time><!--commit_datetime--></time>,
-          <q><!--commit_subject--></q>.
+          last commit was <?fugitive commit_hash ?>,
+          at <time><?fugitive commit_datetime ?></time>,
+          <q><?fugitive commit_subject ?></q>.
         </p>
       </footer>
     </div>

@@ -19,7 +19,7 @@ commit_Hash=`git log -1 --format="%H"`
 commit_hash=`git log -1 --format="%h"`
 commit_author=`git log -1 --format="%an"`
 commit_author_email=`git log -1 --format="%ae" | sed "s/@/[at]/;s/\./(dot)/"`
-commit_datetime=`git log -1 --format="%ai" | cut -d' ' -f1,2`
+commit_datetime=`git log -1 --format="%ai"`
 commit_date=`git log -1 --format="%ad" --date="short"`
 commit_time=`git log -1 --format="%ai" | cut -d' ' -f2`
 commit_timestamp=`git log -1 --format="%at"`
@@ -43,10 +43,10 @@ article_get_content() {
 }
 
 replace_var_by_string() {
-  sed "s/<\!--$1-->/$2/"
+  sed "s/<?fugitive\s\+$1\s*?>/$2/"
 }
 replace_var_by_file() {
-  sed "/<\!--$1-->/ {
+  sed "/<?fugitive\s\+$1\s*?>/ {
     r $2
     d }"
 }
