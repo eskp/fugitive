@@ -25,22 +25,30 @@ commit_time=`git log -1 --format="%ai" | cut -d' ' -f2`
 commit_timestamp=`git log -1 --format="%at"`
 commit_subject=`git log -1 --format="%s"`
 commit_slug=`git log -1 --format="%f"`
-commit_body=`git log -1 --format="%b"`
+commit_body() {
+  tmp="/tmp/fugitive-$$.$RANDOM"
+  git log -1 --format="%b" > "$tmp"
+  (sleep 5 && rm -f "$tmp") & # this message will self-destruct in 5s
+  echo "$tmp"
+}
 
 article_get_title() {
   head -1 "$1"
 }
 article_get_content() {
-  tail -n+2 "$1" > "/tmp/$$"
-  (sleep 5 && rm -f "/tmp/$$") &
-  echo "/tmp/$$"
+  tmp="/tmp/fugitive-$$.$RANDOM"
+  tail -n+2 "$1" > "$tmp"
+  (sleep 5 && rm -f "$tmp") & # this message will self-destruct in 5s
+  echo "$tmp"
 }
 
 replace_var_by_string() {
   sed "s/<\!--$1-->/$2/"
 }
 replace_var_by_file() {
-  sed "/<\!--$1-->/ { r $2; d }"
+  sed "/<\!--$1-->/ { \
+    r $2
+    d }"
 }
 replace_commit_info() {
   replace_var_by_string "commit_Hash" "$commit_Hash" | \
@@ -50,22 +58,26 @@ replace_commit_info() {
     replace_var_by_string "commit_date" "$commit_date" | \
     replace_var_by_string "commit_subject" "$commit_subject" | \
     replace_var_by_string "commit_slug" "$commit_slug" | \
-    replace_var_by_string "commit_body" "$commit_body"
+    replace_var_by_file "commit_body" "`commit_body`"
 }
 
 for f in $deleted_files; do
   if [ "$f" != "${f#$articles_dir}" ]; then
+    echo -n "Deleting $public_dir/${f#$articles_dir/}.html... "
     rm $public_dir/${f#$articles_dir/}.html
+    echo "done."
   fi
 done
 
 for f in $added_files $modified_files; do
   if [ "$f" != "${f#$articles_dir}" ]; then
+    echo -n "Generating $public_dir/${f#$articles_dir/}.html from $f... "
     cat $templates_dir/article.html | \
       replace_commit_info | \
       replace_var_by_string "article_title" "`article_get_title \"$f\"`" | \
       replace_var_by_file "article_content" "`article_get_content \"$f\"`" | \
       cat > $public_dir/${f#$articles_dir/}.html
+    echo "done."
   fi
 done
 
