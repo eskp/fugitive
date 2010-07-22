@@ -15,10 +15,14 @@ deleted_files=`git log -1 --name-status --pretty="format:" | grep -E '^D' | \
 last_published_article=`git log --name-status --pretty="format:" | \
   grep -E '^A' | cut -f2 | grep -E '^$articles_dir' | head -1`
 
+sanit_mail() {
+  sed "s/@/[at]/;s/\./(dot)/"
+}
+
 commit_Hash=`git log -1 --format="%H"`
 commit_hash=`git log -1 --format="%h"`
 commit_author=`git log -1 --format="%an"`
-commit_author_email=`git log -1 --format="%ae" | sed "s/@/[at]/;s/\./(dot)/"`
+commit_author_email=`git log -1 --format="%ae" | sanit_mail`
 commit_datetime=`git log -1 --format="%ai"`
 commit_date=`git log -1 --format="%ad" --date="short"`
 commit_time=`git log -1 --format="%ai" | cut -d' ' -f2`
@@ -32,10 +36,13 @@ commit_body() {
   echo "$tmp"
 }
 
-article_get_title() {
+article_info() {
+  git log --format="$1" -- "$2"
+}
+article_title() {
   head -1 "$1"
 }
-article_get_content() {
+article_content() {
   tmp=`tempfile -p "fugitive"`
   tail -n+2 "$1" > "$tmp"
   (sleep 5 && rm -f "$tmp") & # this message will self-destruct in 5s
@@ -55,10 +62,37 @@ replace_commit_info() {
     replace_var_by_string "commit_hash" "$commit_hash" | \
     replace_var_by_string "commit_author" "$commit_author" | \
     replace_var_by_string "commit_author_email" "$commit_author_email" | \
+    replace_var_by_string "commit_datetime" "$commit_datetime" | \
     replace_var_by_string "commit_date" "$commit_date" | \
+    replace_var_by_string "commit_time" "$commit_time" | \
+    replace_var_by_string "commit_timestamp" "$commit_timestamp" | \
     replace_var_by_string "commit_subject" "$commit_subject" | \
     replace_var_by_string "commit_slug" "$commit_slug" | \
     replace_var_by_file "commit_body" "`commit_body`"
+}
+replace_article_info() {
+  cdt=`article_info "%ai" "$1" | tail -1`
+  mdt=`article_info "%ai" "$1" | head -1`
+  replace_var_by_file "article_content" "`article_content \"$1\"`" | \
+    replace_var_by_string "article_title" "`article_title \"$1\"`" | \
+    replace_var_by_string "article_cdatetime" "$cdt" | \
+    replace_var_by_string "article_cdate" "`echo $cdt | cut -d' ' -f1`" | \
+    replace_var_by_string "article_ctime" "`echo $cdt | cut -d' ' -f2`" | \
+    replace_var_by_string "article_ctimestamp" \
+      "`article_info \"%at\" \"$1\" | tail -1`" | \
+    replace_var_by_string "article_mdatetime" "$mdt" | \
+    replace_var_by_string "article_mdate" "`echo $mdt | cut -d' ' -f1`" | \
+    replace_var_by_string "article_mtime" "`echo $mdt | cut -d' ' -f2`" | \
+    replace_var_by_string "article_mtimestamp" \
+      "`article_info \"%at\" \"$1\" | head -1`" | \
+    replace_var_by_string "article_cauthor" \
+      "`article_info \"%an\" \"$1\" | tail -1`" | \
+    replace_var_by_string "article_cauthor_email" \
+      "`article_info \"%ae\" \"$1\" | tail -1 | sanit_mail`" | \
+    replace_var_by_string "article_mauthor" \
+      "`article_info \"%an\" \"$1\" | head -1`" | \
+    replace_var_by_string "article_mauthor_email" \
+      "`article_info \"%ae\" \"$1\" | head -1 | sanit_mail`"
 }
 
 for f in $deleted_files; do
@@ -74,8 +108,7 @@ for f in $added_files $modified_files; do
     echo -n "Generating $public_dir/${f#$articles_dir/}.html from $f... "
     cat $templates_dir/article.html | \
       replace_commit_info | \
-      replace_var_by_string "article_title" "`article_get_title \"$f\"`" | \
-      replace_var_by_file "article_content" "`article_get_content \"$f\"`" | \
+      replace_article_info "$f" | \
       cat > $public_dir/${f#$articles_dir/}.html
     echo "done."
   fi

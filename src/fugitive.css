@@ -1,0 +1,235 @@
+* { margin: 0; padding: 0; }
+html, body {
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+  font-size: 1em;
+  text-align: center;
+  color: #333;
+}
+#container {
+  padding: 0 1em;
+  margin: 0 auto;
+  width: 51%;
+  min-width: 480px;
+}
+nav {
+  display: block;
+  margin: 0;
+  padding: 0.3em 1em;
+  border: 1px solid #ccc;
+  border-top: 0;
+  background: #f2f2f2;
+  color: #aaa;
+  font-size: 1.3em;
+  text-align: left;
+}
+nav ul { padding: 0; margin: 0; }
+nav ul li { display: inline; }
+nav ul li:before { content: " — "; }
+nav ul li:first-child:before { content: ""; }
+nav ul li a {
+  color: #aaa;
+  text-decoration: none;
+}
+nav ul li a:hover { color: #888; }
+header {
+  display: block;
+  margin: 1em 0;
+  padding: 1em;
+  border: 4px double #ccc;
+}
+header h1 {
+  margin: 0 0 0.3em 0;
+  madding: 0;
+  color: 
+  font-size: 2em;
+  font-weight: normal;
+}
+header q {
+  font-size: 1.2em;
+  font-style: italic;
+}
+article {
+  display: block;
+  text-align: left;
+  counter-reset: code;
+  counter-reset: figure;
+}
+article header {
+  display: block;
+  margin: 2em 0 0 0; 
+  padding: 0;
+  border-style: none;
+  border-bottom: 1px dashed #ccc;
+}
+article header h2 {
+  margin: 0;
+  padding: 0 0 0.2em 0;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+article footer {
+  display: block;
+  margin: 0.3em 0 2em 0;
+  padding: 0;
+  border-style: none;
+  color: #888;
+  font-size: 1em;
+  text-align: right;
+}
+article > div {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5em;
+  font-size: 1.1em;
+}
+article > div p:first-child:first-letter {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+article > div p {
+  margin: 1em 0;
+  text-indent: 2em;
+}
+article > div ul {
+  margin: 1em 0;
+  padding: 0 0 0 3em;
+}
+article > div ul li {
+  margin: 0 0 0.2em 0;
+  padding: 0 0 0 0.5em;
+  list-style-position: outside;
+  list-style-type: circle;
+}
+article > div dl {
+  margin: 1em 0;
+  padding: 0;
+}
+article > div dl dt {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+}
+article > div dl dd {
+  margin: 0 0 0.3em 0;
+  padding: 0 0 0 2em;
+}
+article > div blockquote {
+  margin: 1em 0;
+  padding: 0.5em;
+  padding-left: 2em;
+  background: #f2f2f2;
+  border-left: 0.1em solid #ccc;
+}
+article > div blockquote p {
+  margin: 0.5em 0;
+}
+article > div a:hover { text-decoration: underline; }
+article > div a:visited { color: #048; }
+article > div code {
+  color: #ccc;
+  background-color: #333;
+  padding: 0 0.2em;
+}
+article > div pre:before {
+  display: block;
+  padding: 0 0.5em;
+  font-size: 0.8em;
+  line-height: 1em;
+  background-color: #444;
+  content: "code " counter(code) ":";
+  counter-increment: code;
+}
+article > div pre {
+  margin: 1em 0;
+  padding: 0.5em;
+  overflow: auto;
+  color: #ccc;
+  background-color: #333;
+  max-height: 420px;
+}
+article > div pre .comment {
+  color: #888;
+}
+article > div pre .comment-delimiter {
+  color: #888;
+}
+article > div pre .constant {
+  color: #d0d;
+}
+article > div pre .function-name {
+  color: #27d;
+}
+article > div pre .keyword {
+  color: #dd0;
+}
+article > div pre .preprocessor {
+  color: #9c3;
+}
+article > div pre .string {
+  color: #3af;
+}
+article > div pre .type {
+  color: #fa0;
+}
+article > div pre .variable-name {
+  color: #0b0;
+}
+article > div a {
+  color: #08f;
+  text-decoration: none;
+}
+article > div figure {
+  display: block;
+  margin: 1em 0;
+  padding: 0;
+  text-align: center;
+}
+article > div figure figcaption {
+  display: block;
+}
+article > div figure figcaption:before {
+  display: inline;
+  content: "figure " counter(figure) ":";
+  counter-increment: figure;
+}
+article > div .left {
+  float: left;
+  margin: 0 1em 0.5em 0;
+}
+article > div .right {
+  float: right;
+  margin: 0 0 0.5em 1em;
+}
+article > div .center {
+  text-align: center;
+}
+article > div hr {
+  margin: 1.5em auto;
+  padding: 0;
+  height: 1px;
+  width: 80%;
+  border: none;
+  background-color: #aaa;
+}
+footer {
+  display: block;
+  margin: 3em 0 0 0;
+  padding: 1em;
+  border-top: 1px dotted #aaa;
+  color: #888;
+  font-size: 0.9em;
+  clear: both;
+}
+footer p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5em;
+}
+footer p a {
+  color: #666;
+  text-decoration: none;
+}
+

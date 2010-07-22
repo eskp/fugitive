@@ -21,25 +21,28 @@
       </nav>
       <header>
         <h1>p4bl0's blog</h1>
-        <q>the blog where every number is written in base 10.</q>
+        <q>the blog where every number is written in base 10</q>
       </header>
-      <div id="content">
-        <article>
-          <header>
-            <h2><?fugitive article_title ?></h2>
-          </header>
-          <footer>
-            by <?fugitive commit_author ?>, on
-            <time datetime="<?fugitive commit_datetime ?>">
-              <?fugitive commit_date ?> at
-              <?fugitive commit_time ?></time>.
-          </footer>
-          </header>
-          <div>
-            <?fugitive article_content ?>
-          </div>
-        </article>
-      </div>
+      <article>
+        <header>
+          <h2><?fugitive article_title ?></h2>
+        </header>
+        <footer>
+          by <?fugitive article_cauthor ?>, on
+          <time datetime="<?fugitive article_cdatetime ?>">
+            <?fugitive article_cdate ?> at <?fugitive article_ctime ?>
+          </time><br />
+          <small>
+            last update by <?fugitive article_mauthor ?>, on
+            <time datetime="<?fugitive article_mdatetime ?>">
+              <?fugitive article_mdate ?> at <?fugitive article_mtime ?>
+            </time>
+          </small>
+        </footer>
+        <div>
+          <?fugitive article_content ?>
+        </div>
+      </article>
       <footer>
         <p>
           <a href="http://www.gnu.org/copyleft/copyleft.html">copyleft</a>
@@ -51,9 +54,9 @@
           hosted at <a href="http://berthold.shebang.ws/">berthold</a>'s
         </p>
         <p>
-          last commit was <?fugitive commit_hash ?>,
-          at <time><?fugitive commit_datetime ?></time>,
-          <q><?fugitive commit_subject ?></q>.
+          last build was <?fugitive commit_hash ?>,
+          <time><?fugitive commit_datetime ?></time>,
+          <q><?fugitive commit_subject ?></q>
         </p>
       </footer>
     </div>
