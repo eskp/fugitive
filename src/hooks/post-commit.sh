@@ -26,7 +26,7 @@ commit_timestamp=`git log -1 --format="%at"`
 commit_subject=`git log -1 --format="%s"`
 commit_slug=`git log -1 --format="%f"`
 commit_body() {
-  tmp="/tmp/fugitive-$$.$RANDOM"
+  tmp=`tempfile -p "fugitive"`
   git log -1 --format="%b" > "$tmp"
   (sleep 5 && rm -f "$tmp") & # this message will self-destruct in 5s
   echo "$tmp"
@@ -36,7 +36,7 @@ article_get_title() {
   head -1 "$1"
 }
 article_get_content() {
-  tmp="/tmp/fugitive-$$.$RANDOM"
+  tmp=`tempfile -p "fugitive"`
   tail -n+2 "$1" > "$tmp"
   (sleep 5 && rm -f "$tmp") & # this message will self-destruct in 5s
   echo "$tmp"
@@ -46,7 +46,7 @@ replace_var_by_string() {
   sed "s/<\!--$1-->/$2/"
 }
 replace_var_by_file() {
-  sed "/<\!--$1-->/ { \
+  sed "/<\!--$1-->/ {
     r $2
     d }"
 }
@@ -80,4 +80,3 @@ for f in $added_files $modified_files; do
     echo "done."
   fi
 done
-
