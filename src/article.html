@@ -2,15 +2,12 @@
 <!DOCTYPE html>
 <html dir="ltr" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>p4bl0's blog: <?fugitive article_title ?></title>
+    <title><?fugitive-install name ?>'s blog: <?fugitive article_title ?></title>
     <meta http-equiv="Content-type" content="application/xhtml+xml; charset=utf-8" />
-    <meta name="author" content="Pablo Rauzy" />
-    <meta name="description" content="p4bl0 (Pablo Rauzy)'s blog" />
-    <meta name="keywords" content="p4bl0, pablo, rauzy, blog, geek, student, ens, normale sup, computer science, programming, language" />
-    <link rel="icon" type="image/png" href="/images/icons/pablo.png" />
+    <meta name="author" content="<?fugitive-install name ?>" />
+    <meta name="description" content="<?fugitive-install name ?>'s blog" />
     <link rel="stylesheet" href="fugitive.css" type="text/css" media="screen" charset="utf-8" /> 
   </head>
-
   <body>
     <div id="container">
       <nav>
@@ -20,8 +17,8 @@
         </ul>
       </nav>
       <header>
-        <h1>p4bl0's blog</h1>
-        <q>the blog where every number is written in base 10</q>
+        <h1><?fugitive-install name ?>'s blog</h1>
+        <q>Weeks of coding can save you hours of planning.</q>
       </header>
       <article>
         <header>
@@ -46,12 +43,9 @@
       <footer>
         <p>
           <a href="http://www.gnu.org/copyleft/copyleft.html">copyleft</a>
-          <a href="http://pablo.rauzy.name/"
-             title="Pablo Rauzy (p4bl0)">pablo rauzy</a>
+          <?fugitive-install name ?> <?fugitive-install year ?>
           &mdash;
           powered by <a href="http://gitorious.org/fugitive">fugitive</a>
-          &mdash;
-          hosted at <a href="http://berthold.shebang.ws/">berthold</a>'s
         </p>
         <p>
           last build was <?fugitive commit_hash ?>,
