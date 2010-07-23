@@ -56,6 +56,8 @@ article {
   text-align: left;
   counter-reset: code;
   counter-reset: figure;
+  counter-reset: section;
+  counter-reset: subsection;
 }
 article header {
   display: block;
@@ -66,7 +68,7 @@ article header {
 }
 article header h1 {
   margin: 0;
-  padding: 0 0 0.2em 0;
+  padding: 0 0 0.1em 0;
   font-size: 1.5em;
   font-weight: bold;
 }
@@ -85,8 +87,35 @@ article > div {
   line-height: 1.5em;
   font-size: 1.1em;
 }
+article > div a {
+  color: #08f;
+  text-decoration: none;
+}
 article > div a:hover { text-decoration: underline; }
 article > div a:visited { color: #048; }
+article > div h2 {
+  margin: 1em 0 0.5em 0;
+  padding: 0;
+  font-size: 1.4em;
+  font-weight: normal;
+  counter-increment: section;
+}
+article > div h2:before {
+  display: inline;
+  content: counter(section) ". ";
+  counter-reset: subsection;
+}
+article > div h3 {
+  margin: 1em 0 0.5em 0;
+  padding: 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+article > div h3:before {
+  display: inline;
+  content: counter(section) "." counter(subsection) ". ";
+  counter-increment: subsection;
+}
 article > div p:first-child:first-letter {
   font-size: 1.5em;
   font-weight: bold;
@@ -176,10 +205,6 @@ article > div pre .type {
 }
 article > div pre .variable-name {
   color: #0b0;
-}
-article > div a {
-  color: #08f;
-  text-decoration: none;
 }
 article > div figure {
   display: block;
