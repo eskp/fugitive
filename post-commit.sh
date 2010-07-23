@@ -147,7 +147,7 @@ replace_article_info() {
 }
 
 _echo() {
-  echo -ne "[fugitive] "$*
+  echo -ne "[fugitive] $*"
 }
 
 for f in $deleted_files; do
@@ -168,7 +168,7 @@ for f in $added_files $modified_files; do
       process_includes | \
       replace_commit_info | \
       replace_article_info "$art" | \
-      cat > "$public_dir/$art.html"
+      sed "/^\s*$/d" > "$public_dir/$art.html"
     echo "done."
   fi
 done
