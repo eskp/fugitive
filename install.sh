@@ -32,11 +32,11 @@ fugitive_install() {
   git init >/dev/null
   echo "done."
   echo -n "Creating default directory tree... "
-  mkdir -p fugitive/drafts fugitive/articles fugitive/templates
+  mkdir -p _drafts _articles _templates
   echo "done."
   echo -n "Adding default directory paths to git config... "
-  git config --add --path fugitive.templates-dir "fugitive/templates"
-  git config --add --path fugitive.articles-dir "fugitive/articles"
+  git config --add --path fugitive.templates-dir "_templates"
+  git config --add --path fugitive.articles-dir "_articles"
   git config --add --path fugitive.public-dir "."
   echo "done."
   echo -n "Writing default template files... "
