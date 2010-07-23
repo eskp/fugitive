@@ -53,10 +53,8 @@ EOF
   git add fugitive/templates/* fugitive.css >/dev/null
   git commit -m "fugitive inital import" >/dev/null
   echo "done."
-  echo -n "Preventing git to track generated html files... "
-  (base64 -d | gunzip) > .git/info/exclude <<EOF
-#INCLUDE:exclude#
-EOF
+  echo -n "Preventing git to track temp files... "
+  echo "*~" > .git/info/exclude
   echo "done."
   cd -
   echo "Installation complete, please see the README file for an howto."
