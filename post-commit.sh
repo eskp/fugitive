@@ -32,7 +32,6 @@ commit_slug=`git log -1 --format="%f"`
 commit_body() {
   tmp=`tempfile -p "fugitive"`
   git log -1 --format="%b" > "$tmp"
-  (sleep 5 && rm -f "$tmp") & # this message will self-destruct in 5s
   echo "$tmp"
 }
 
@@ -45,17 +44,18 @@ article_title() {
 article_content() {
   tmp=`tempfile -p "fugitive"`
   tail -n+2 "$1" > "$tmp"
-  (sleep 5 && rm -f "$tmp") & # this message will self-destruct in 5s
   echo "$tmp"
 }
 
 replace_var_by_string() {
   sed "s/<?fugitive\s\+$1\s*?>/$2/"
 }
+# REMEMBER: 2nd arg should be a tempfile!
 replace_var_by_file() {
   sed "/<?fugitive\s\+$1\s*?>/ {
     r $2
     d }"
+  rm "$2"
 }
 replace_commit_info() {
   replace_var_by_string "commit_Hash" "$commit_Hash" | \

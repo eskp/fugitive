@@ -10,6 +10,19 @@ fugitive_write_template() {
     replace_var_by_string year "`date +%Y`"
 }
 
+fugitive_install_hooks() {
+  echo -n "Installing fugitive hooks scripts... "
+  (base64 -d | gunzip) > .git/hooks/post-commit <<EOF
+#INCLUDE:post-commit.sh#
+EOF
+  chmod +x .git/hooks/post-commit
+  (base64 -d | gunzip) > .git/hooks/post-receive <<EOF
+#INCLUDE:post-receive.sh#
+EOF
+  chmod +x .git/hooks/post-receive
+  echo "done."
+}
+
 fugitive_install() {
   DIR="."
   if [ "$1" != "" ]; then DIR="$1"; fi
@@ -19,7 +32,7 @@ fugitive_install() {
   git init >/dev/null
   echo "done."
   echo -n "Creating default directory tree... "
-  mkdir -p fugitive/{drafts,articles,templates}
+  mkdir -p fugitive/drafts fugitive/articles fugitive/templates
   echo "done."
   echo -n "Adding default directory paths to git config... "
   git config --add --path fugitive.templates-dir "fugitive/templates"
@@ -35,20 +48,11 @@ EOF
 EOF
   echo "done."
   echo -n "Writing default css file... "
-  (base64 -d | gunzip) > fugitice.css <<EOF
+  (base64 -d | gunzip) > fugitive.css <<EOF
 #INCLUDE:fugitive.css#
 EOF
   echo "done."
-  echo -n "Installing fugitive hooks scripts... "
-  (base64 -d | gunzip) > .git/hooks/post-commit <<EOF
-#INCLUDE:post-commit.sh#
-EOF
-  chmod +x .git/hooks/post-receive
-  (base64 -d | gunzip) > .git/hooks/post-receive <<EOF
-#INCLUDE:post-receive.sh#
-EOF
-  chmod +x .git/hooks/post-receive
-  echo "done."
+  fugitive_install_hooks
   echo -n "Importing files into git repository... "
   git add fugitive/templates/* fugitive.css >/dev/null
   git commit -m "fugitive inital import" >/dev/null
@@ -56,7 +60,7 @@ EOF
   echo -n "Preventing git to track temp files... "
   echo "*~" > .git/info/exclude
   echo "done."
-  cd -
+  cd - >/dev/null
   echo "Installation complete, please see the README file for an howto."
 }
 
