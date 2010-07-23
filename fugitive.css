@@ -43,7 +43,6 @@ header {
 header h1 {
   margin: 0 0 0.3em 0;
   madding: 0;
-  color: 
   font-size: 2em;
   font-weight: normal;
 }
@@ -64,7 +63,7 @@ article header {
   border-style: none;
   border-bottom: 1px dashed #ccc;
 }
-article header h2 {
+article header h1 {
   margin: 0;
   padding: 0 0 0.2em 0;
   font-size: 1.5em;
@@ -85,6 +84,8 @@ article > div {
   line-height: 1.5em;
   font-size: 1.1em;
 }
+article > div a:hover { text-decoration: underline; }
+article > div a:visited { color: #048; }
 article > div p:first-child:first-letter {
   font-size: 1.5em;
   font-weight: bold;
@@ -126,8 +127,6 @@ article > div blockquote {
 article > div blockquote p {
   margin: 0.5em 0;
 }
-article > div a:hover { text-decoration: underline; }
-article > div a:visited { color: #048; }
 article > div code {
   color: #ccc;
   background-color: #333;
