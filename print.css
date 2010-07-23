@@ -1,0 +1,11 @@
+#container {
+  width: auto;
+  padding: 1em;
+  margin: 0;
+}
+nav, header, footer {
+  display: none;
+}
+article header, article footer {
+  display: block;
+}

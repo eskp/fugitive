@@ -47,9 +47,12 @@ EOF
 #INCLUDE:archives.html#
 EOF
   echo "done."
-  echo -n "Writing default css file... "
+  echo -n "Writing default css files... "
   (base64 -d | gunzip) > fugitive.css <<EOF
 #INCLUDE:fugitive.css#
+EOF
+  (base64 -d | gunzip) > print.css <<EOF
+#INCLUDE:print.css#
 EOF
   echo "done."
   fugitive_install_hooks
