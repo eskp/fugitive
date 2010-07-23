@@ -33,11 +33,16 @@
               </time>
             </dt>
             <dd>
-              <a href="<?fugitive article_url ?>"><?fugitive article_title ?></a>
+              <a href="<?fugitive article_url ?>">
+                <?fugitive article_title ?>
+              </a>
+              <?fugitive ifset:article_mdatetime ?>
               <br /><small>last update on
-              <time datetime="<?fugitive article_mdatetime ?>">
-                <?fugitive article_mdate ?> at <?fugitive article_mtime ?>
-              </time></small>
+                <time datetime="<?fugitive article_mdatetime ?>">
+                  <?fugitive article_mdate ?> at <?fugitive article_mtime ?>
+                </time>
+              </small>
+              <?fugitive endifset:article_mdatetime ?>
             </dd>
             <?fugitive multi-end ?>
           </dl>
