@@ -8,16 +8,26 @@ html pages and thus having only git as dependency.
 INSTALL
 =======
 
-Simply run `fugitive --install <dir>`.
+Build
+-----
+If you want to build fugitive from the source, clone the git repository:
+`git clone git://gitorious.org/fugitive/fugitive.git fugitive`
+Then simply go in the newly created directory: `cd fugitive`, and run the build
+script: `./build.sh`.
+This will generate an executable file "fugitive".
+
+Create a blog
+-------------
+If you have the "fugitive" executable file and want to start a new blog:
+Run `fugitive --install <dir>`.
 This will create the git repos with appropriate hooks and files in <dir>.
 If <dir> isn't specified then the current working directory is used.
 
-NOTE: You need to use the same process to install remote repository.
+NOTE: You need to use the same process to install any remote repository where
+you'd like to push your blog.
 
-
-UPDATE
-======
-
+Update
+------
 Simply run `fugitive --install-hooks <dir>`.
 This will only (re)install fugitive hooks scripts.
 If <dir> isn't specified then the current working directory is used.
@@ -34,11 +44,11 @@ There are three item in the "fugitive" section of the git config:
    under your git repos.
 
  - "articles-dir" is the path where fugitive will look for published articles.
-   Default value is "fugitive/articles". This path is relative to the root of
+   Default value is "_articles". This path is relative to the root of
    the git repository, must be in it and must not start with ".".
 
  - "templates-dir" is the path where fugitive will look for templates files.
-   Default value is "fugitive/templates". This path is relative to the root of
+   Default value is "_templates". This path is relative to the root of
    the git repository, must be in it and must not start with ".".
 
 NOTE: You must NOT put a trailing '/' at the end of any of those paths.
