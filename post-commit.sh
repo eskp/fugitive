@@ -92,7 +92,8 @@ replace_article_info() {
     replace_var_by_string "article_mauthor" \
       "`article_info \"%an\" \"$1\" | head -1`" | \
     replace_var_by_string "article_mauthor_email" \
-      "`article_info \"%ae\" \"$1\" | head -1 | sanit_mail`"
+      "`article_info \"%ae\" \"$1\" | head -1 | sanit_mail`" | \
+    replace_var_by_string "article_url" "$public_dir/${1#$articles_dir/}.html"
 }
 
 for f in $deleted_files; do
