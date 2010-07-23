@@ -50,17 +50,13 @@ USAGE
 General use
 -----------
 
+Article you want to publish should be file without the .html extension in the
+"articles-dir" directory (see CONFIGURATION).
+
+The first line of the file will be used as title and the rest of the file as
+the content.
 
 Template system
 ---------------
+*TODO*
 
-
-IDEA
-====
-
-* make devrait gzippé puis base64 encodé les fichiers pour les mettres dans le
-  script d'install, et l'help aussi.
-
-* index = cp de last article.
-
-* trouver moyen de mettre des prev et next dans la nav
