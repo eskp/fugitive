@@ -56,6 +56,9 @@ Article you want to publish should be file without the .html extension in the
 The first line of the file will be used as title and the rest of the file as
 the content.
 
+/!\ WARNING: DO NOT CREATE AN ARTICLE FILE NAMED "archives"
+/!\ WARNING: DO NOT CREATE AN ARTICLE FILE NAMED "index"
+
 Template system
 ---------------
 *TODO*
