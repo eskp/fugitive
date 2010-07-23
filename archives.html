@@ -24,9 +24,24 @@
         <header>
           <h2>Archives</h2>
         </header>
-        <section>
-          <?fugitive archives ?>
-        </section>
+        <div>
+          <dl>
+            <?fugitive multi-start ?>
+            <dt>
+              <time datetime="<?fugitive article_cdatetime ?>">
+                <?fugitive article_cdate ?> at <?fugitive article_ctime ?>
+              </time>
+            </dt>
+            <dd>
+              <a href="<?fugitive article_url ?>"><?fugitive article_title ?></a>
+              <br /><small>last update on
+              <time datetime="<?fugitive article_mdatetime ?>">
+                <?fugitive article_mdate ?> at <?fugitive article_mtime ?>
+              </time></small>
+            </dd>
+            <?fugitive multi-end ?>
+          </dl>
+        </div>
       </article>
       <footer>
         <p>
