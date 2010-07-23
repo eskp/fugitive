@@ -11,6 +11,18 @@
   <body>
     <div id="container">
       <nav>
+        <ul class="nav">
+          <?fugitive ifset:article_previous_file ?>
+          <li>
+            <a href="<?fugitive article_previous_file ?>.html">« previous</a>
+          </li>
+          <?fugitive endifset:article_previous_file ?>
+          <?fugitive ifset:article_next_file ?>
+          <li>
+            <a href="<?fugitive article_next_file ?>.html">next »</a>
+          </li>
+          <?fugitive endifset:article_next_file ?>
+        </ul>
         <ul>
           <li><a href="index.html">home</a></li>
           <li><a href="archives.html">archives</a></li>
@@ -28,13 +40,16 @@
           by <?fugitive article_cauthor ?>, on
           <time datetime="<?fugitive article_cdatetime ?>">
             <?fugitive article_cdate ?> at <?fugitive article_ctime ?>
-          </time><br />
+          </time>
+          <?fugitive ifset:article_mdatetime ?>
+          <br />
           <small>
             last update by <?fugitive article_mauthor ?>, on
             <time datetime="<?fugitive article_mdatetime ?>">
               <?fugitive article_mdate ?> at <?fugitive article_mtime ?>
             </time>
           </small>
+          <?fugitive endifset:article_mdatetime ?>
         </footer>
         <div>
           <?fugitive article_content ?>

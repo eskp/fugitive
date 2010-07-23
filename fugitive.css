@@ -26,6 +26,7 @@ nav {
   text-align: left;
 }
 nav ul { padding: 0; margin: 0; }
+nav ul.nav { float: right; }
 nav ul li { display: inline; }
 nav ul li:before { content: " — "; }
 nav ul li:first-child:before { content: ""; }
