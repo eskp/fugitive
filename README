@@ -1,0 +1,66 @@
+INFO
+====
+
+fugitive is a blog engine running on top of git using hooks to generate static
+html pages and thus having only git as dependency.
+
+
+INSTALL
+=======
+
+Simply run `fugitive --install <dir>`.
+This will create the git repos with appropriate hooks and files in <dir>.
+If <dir> isn't specified then the current working directory is used.
+
+NOTE: You need to use the same process to install remote repository.
+
+
+UPDATE
+======
+
+Simply run `fugitive --install-hooks <dir>`.
+This will only (re)install fugitive hooks scripts.
+If <dir> isn't specified then the current working directory is used.
+
+
+CONFIGURATION
+=============
+
+There are three item in the "fugitive" section of the git config:
+
+ - "public-dir" is the path to the directory that will contain the generated
+   html files. Defautlt value is ".", the root of the git repository. You
+   could set it to "blog" for instance if you already have a static website
+   under your git repos.
+
+ - "articles-dir" is the path where fugitive will look for published articles.
+   Default value is "fugitive/articles". This path is relative to the root of
+   the git repository, must be in it and must not start with ".".
+
+ - "templates-dir" is the path where fugitive will look for templates files.
+   Default value is "fugitive/templates". This path is relative to the root of
+   the git repository, must be in it and must not start with ".".
+
+NOTE: You must NOT put a trailing '/' at the end of any of those paths.
+
+
+USAGE
+=====
+
+General use
+-----------
+
+
+Template system
+---------------
+
+
+IDEA
+====
+
+* make devrait gzippé puis base64 encodé les fichiers pour les mettres dans le
+  script d'install, et l'help aussi.
+
+* index = cp de last article.
+
+* trouver moyen de mettre des prev et next dans la nav
