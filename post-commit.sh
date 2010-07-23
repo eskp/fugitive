@@ -73,8 +73,7 @@ replace_commit_info() {
 replace_article_info() {
   cdt=`article_info "%ai" "$1" | tail -1`
   mdt=`article_info "%ai" "$1" | head -1`
-  replace_var_by_file "article_content" "`article_content \"$1\"`" | \
-    replace_var_by_string "article_title" "`article_title \"$1\"`" | \
+  replace_var_by_string "article_title" "`article_title \"$1\"`" | \
     replace_var_by_string "article_cdatetime" "$cdt" | \
     replace_var_by_string "article_cdate" "`echo $cdt | cut -d' ' -f1`" | \
     replace_var_by_string "article_ctime" "`echo $cdt | cut -d' ' -f2`" | \
@@ -108,6 +107,7 @@ for f in $added_files $modified_files; do
   if [ "$f" != "${f#$articles_dir}" ]; then
     echo -n "Generating $public_dir/${f#$articles_dir/}.html from $f... "
     cat $templates_dir/article.html | \
+      replace_var_by_file "article_content" "`article_content \"$f\"`" | \
       replace_commit_info | \
       replace_article_info "$f" | \
       cat > $public_dir/${f#$articles_dir/}.html
