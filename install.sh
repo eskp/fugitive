@@ -28,6 +28,10 @@ fugitive_install() {
   if [ "$1" != "" ]; then DIR="$1"; fi
   if [ ! -d "$DIR" ]; then mkdir -p "$DIR"; fi
   cd "$DIR"
+  if [ -d ".git" ]; then
+    echo "There's already a git repository here, aborting install."
+    exit 1
+  fi
   echo -n "Creating new git repository... "
   git init >/dev/null
   echo "done."
