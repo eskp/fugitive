@@ -110,14 +110,34 @@ replace_str() {
 
 # REMEMBER: 2nd arg should be a tempfile!
 replace_file() {
-  sed "/<?fugitive\s\+$1\s*?>/ {
-    r $2
-    d }"
+  sed "s/<?fugitive\s\+$1\s*?>/\n\0\n/g" | \
+    sed "/<?fugitive\s\+$1\s*?>/ {
+      r $2
+      d }"
   rm "$2"
 }
 
 replace_includes() {
-  cat
+  buf=`tempfile -p "fugitive"`
+  buf2=`tempfile -p "fugitive"`
+  cat > "$buf"
+  includes=`cat "$buf" | \
+    sed "s/<?fugitive\s\+include:.\+\s*?>/\n\0\n/g" | \
+    grep -E "<\?fugitive\s+include:.+\s*\?>" | \
+    sed "s/^<?fugitive\s\+include://;s/\s*?>$//"`
+  for i in $includes; do
+    esc=`echo -n $i | sed 's/\//\\\\\//g'`
+    inc="$templates_dir/$i"
+    cat "$buf" | \
+      sed "/<?fugitive\s\+include:$esc\s*?>/ {
+        r $inc
+        d }" > "$buf2"
+    tmpbuf="$buf"
+    buf="$buf2"
+    buf2="$tmpbuf"
+  done
+  cat "$buf"
+  rm "$buf" "$buf2"
 }
 
 replace_commit_info() {
@@ -175,6 +195,27 @@ replace_article_info() {
     replace_str "article_previous_title" "$article_previous_title" | \
     replace_str "article_next_file" "$article_next_file" | \
     replace_str "article_next_title" "$article_next_title"
+}
+
+replace_empty_article_info() {
+  replace_str "article_file" "" | \
+    replace_str "article_title" "" | \
+    replace_str "article_cdatetime" "" | \
+    replace_str "article_cdate" "" | \
+    replace_str "article_ctime" "" | \
+    replace_str "article_ctimestamp" "" | \
+    replace_str "article_mdatetime" "" | \
+    replace_str "article_mdate" "" | \
+    replace_str "article_mtime" "" | \
+    replace_str "article_mtimestamp" "" | \
+    replace_str "article_cauthor" "" | \
+    replace_str "article_cauthor_email" "" | \
+    replace_str "article_mauthor" "" | \
+    replace_str "article_mauthor_email" "" | \
+    replace_str "article_previous_file" "" | \
+    replace_str "article_previous_title" "" | \
+    replace_str "article_next_file" "" | \
+    replace_str "article_next_title" ""
 }
 
 replace_foreach_article() {
@@ -278,6 +319,7 @@ if [ $modification -gt 0 ]; then
   cat "$templates_dir/archives.html" | \
     replace_includes | \
     replace_foreach_article | \
+    replace_empty_article_info | \
     replace_commit_info | \
     sed "/^\s*$/d" > "$public_dir/archives.html"
   echo "done."
