@@ -11,7 +11,9 @@ include_file() {
 
 cp install.sh tmp1
 i=1
-for f in archives.html article.html fugitive.css post-commit.sh post-receive.sh; do
+for f in archives.html article.html \
+  fugitive.css print.css \
+  post-commit.sh post-receive.sh; do
   j=$((1 - i))
   include_file tmp$i $f > tmp$j
   i=$j
