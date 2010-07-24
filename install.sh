@@ -40,10 +40,10 @@ fugitive_install() {
   git config --add --path fugitive.public-dir "."
   echo "done."
   echo -n "Writing default template files... "
-  fugitive_write_template > fugitive/templates/article.html <<EOF
+  fugitive_write_template > _templates/article.html <<EOF
 #INCLUDE:article.html#
 EOF
-  fugitive_write_template > fugitive/templates/archives.html <<EOF
+  fugitive_write_template > _templates/archives.html <<EOF
 #INCLUDE:archives.html#
 EOF
   echo "done."
@@ -57,7 +57,7 @@ EOF
   echo "done."
   fugitive_install_hooks
   echo -n "Importing files into git repository... "
-  git add fugitive/templates/* fugitive.css >/dev/null
+  git add _templates/* fugitive.css print.css >/dev/null
   git commit -m "fugitive inital import" >/dev/null
   echo "done."
   echo -n "Preventing git to track temp files... "
