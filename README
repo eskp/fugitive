@@ -71,8 +71,8 @@ fugitive README file
 </p>
 <p>
   If you want your article to be preprocessed by an external tool (markdown,
-  textile...) you need to set <em>preproc</em> to a command line that will take
-  the file path as argument and write to stdout.
+  textile...) you need to set <em>preproc</em> to a command line that will read
+  on stdin and write to stdout.
 </p>
 
 <h2>Usage</h2>

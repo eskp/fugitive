@@ -197,7 +197,7 @@ for f in $added_files $new $modified_files; do
     if [ "$preproc" != "" ]; then
       preproc_bak=`tempfile -p "fugitive" -d "$articles_dir"`
       mv "$f" "$preproc_bak"
-      $preproc "$preproc_bak" > "$f"
+      ($preproc) < "$preproc_bak" > "$f"
     fi
     art="${f#$articles_dir/}"
     echo -n "[fugitive] Generating $public_dir/$art.html from $f... "
