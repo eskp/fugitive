@@ -34,10 +34,11 @@ fugitive_install() {
   echo -n "Creating default directory tree... "
   mkdir -p _drafts _articles _templates
   echo "done."
-  echo -n "Adding default directory paths to git config... "
+  echo -n "Adding default directory paths and settings to git config... "
   git config --add --path fugitive.templates-dir "_templates"
   git config --add --path fugitive.articles-dir "_articles"
   git config --add --path fugitive.public-dir "."
+  git config --add --path fugitive.preproc ""
   echo "done."
   echo -n "Writing default template files... "
   fugitive_write_template > _templates/article.html <<EOF

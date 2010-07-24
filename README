@@ -14,7 +14,7 @@ fugitive README file
   <br />
   <code>git clone git://gitorious.org/fugitive/fugitive.git fugitive</code>
   <br />
-  Then simply go in the newly created directory: <code>cd fugitive</code>, and
+  Then go in the newly created directory: <code>cd fugitive</code>, and
   run the build script: <code>./build.sh</code>.
   <br />
   This will generate an executable file &quot;fugitive&quot;.
@@ -35,7 +35,7 @@ fugitive README file
 </p>
 <h3>Update</h3>
 <p>
-  Simply run <code>fugitive --install-hooks &lt;dir&gt;</code>.<br />
+  Run <code>fugitive --install-hooks &lt;dir&gt;</code>.<br />
   This will only (re)install fugitive hooks scripts.<br />
   If &lt;dir&gt; isn't specified then the current working directory is used.
 </p>
@@ -43,29 +43,36 @@ fugitive README file
 <h2>Configuration</h2>
 
 <p>
-  There are three item in the "fugitive" section of the git config:
+  There are three paths in the &quot;fugitive&quot; section of the git config:
 </p>
 <ul>
   <li>
-    "public-dir" is the path to the directory that will contain the generated
-    html files. Defautlt value is ".", the root of the git repository. You
-    could set it to "blog" for instance if you already have a static website
-    under your git repos.
+    <em>public-dir</em> is the path to the directory that will contain the
+    generated html files. Defautlt value is &quot;.&quot;, the root of the git
+    repository. You could set it to &quot;blog&quot; for instance if you
+    already have a static website under your git repos.
   </li>
   <li>
-    "articles-dir" is the path where fugitive will look for published articles.
-    Default value is "_articles". This path is relative to the root of the git
-    repository, must be in it and must not start with ".".
+    <em>articles-dir</em> is the path where fugitive will look for published
+    articles. Default value is &quot;_articles&quot;. This path is relative to
+    the root of the git repository, must be in it and must not start with
+    &quot;.&quot;.
   </li>
   <li>
-    "templates-dir" is the path where fugitive will look for templates files.
-    Default value is "_templates". This path is relative to the root of the git
-    repository, must be in it and must not start with ".".
+    <em>templates-dire</em> is the path where fugitive will look for templates
+    files. Default value is &quot;_templates&quot;. This path is relative to
+    the root of the git repository, must be in it and must not start with
+    &quot;.&quot;.
   </li>
 </ul>
 <p>
   <strong>NOTE:</strong> You must NOT put a trailing '/' at the end of any of
   those paths.
+</p>
+<p>
+  If you want your article to be preprocessed by an external tool (markdown,
+  textile...) you need to set <em>preproc</em> to a command line that will take
+  the file path as argument and write to stdout.
 </p>
 
 <h2>Usage</h2>
@@ -73,7 +80,7 @@ fugitive README file
 <h3>General use</h3>
 <p>
   Article you want to publish should be file without the .html extension in the
-  "articles-dir" directory (see CONFIGURATION).
+  <em>articles-dir</em> directory (see CONFIGURATION).
 </p>
 <p>
   The first line of the file will be used as title and the rest of the file as
@@ -81,8 +88,8 @@ fugitive README file
 </p>
 <p>
   <strong>/!\ WARNINGS:</strong><br />
-  DO NOT CREATE AN ARTICLE FILE NAMED "archives".<br />
-  DO NOT CREATE AN ARTICLE FILE NAMED "index".
+  DO NOT CREATE AN ARTICLE FILE NAMED &quot;archives&quot;.<br />
+  DO NOT CREATE AN ARTICLE FILE NAMED &quot;index&quot;.
 </p>
 <h3>Template system</h3>
 <p><em>*TODO*</em></p>

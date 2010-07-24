@@ -4,6 +4,7 @@ public_dir=`git config --get fugitive.public-dir`
 if [ ! -d "$public_dir" ]; then mkdir -p "$public_dir"; fi
 templates_dir=`git config --get fugitive.templates-dir`
 articles_dir=`git config --get fugitive.articles-dir`
+preproc=`git config --get fugitive.preproc`
 
 added_files=`git log -1 --name-status --pretty="format:" | grep -E '^A' | \
   cut -f2`
@@ -193,6 +194,11 @@ new=$RANDOM.$$
 for f in $added_files $new $modified_files; do
   if [ "$f" != "${f#$articles_dir}" ]; then
     modification=$((modification + 1))
+    if [ "$preproc" != "" ]; then
+      preproc_bak=`tempfile -p "fugitive" -d "$articles_dir"`
+      mv "$f" "$preproc_bak"
+      $preproc "$preproc_bak" > "$f"
+    fi
     art="${f#$articles_dir/}"
     echo -n "[fugitive] Generating $public_dir/$art.html from $f... "
     cat "$templates_dir/article.html" | \
@@ -207,6 +213,7 @@ for f in $added_files $new $modified_files; do
       echo "$art.html" >> .git/info/exclude
       echo "done."
     fi
+    if [ "$preproc" != "" ]; then mv "$preproc_bak" "$f"; fi
   fi
   if [ "$f" = "$new" ]; then new=""; fi
 done
