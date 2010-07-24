@@ -158,8 +158,8 @@ article > div blockquote p {
   margin: 0.5em 0;
 }
 article > div code {
-  color: #ccc;
-  background-color: #333;
+  color: #eee;
+  background-color: #666;
   padding: 0 0.2em;
 }
 article > div pre:before {
