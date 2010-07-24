@@ -12,6 +12,7 @@ modified_files=`git log -1 --name-status --pretty="format:" | grep -E '^M' | \
   cut -f2`
 deleted_files=`git log -1 --name-status --pretty="format:" | grep -E '^D' | \
   cut -f2`
+generated_files=`tempfile -p "fugitive"`
 
 sanit_mail() {
   sed "s/@/[at]/;s/\./(dot)/"
@@ -41,8 +42,22 @@ for f in $articles_dir/*; do
   fi
 done | sort -nr | cut -d' ' -f2 > "$articles_sorted"
 
+articles_sorted_with_delete=`tempfile -p "fugitive"`
+for f in $articles_dir/* $deleted_files; do
+  ts=`git log --format="%at" -- "$f" | tail -1`
+  if [ "$ts" != "" ]; then
+    echo "$ts ${f#$articles_dir/}"
+  fi
+done | sort -nr | cut -d' ' -f2 > "$articles_sorted_with_delete"
+
 get_article_info() {
   git log --format="$1" -- "$articles_dir/$2"
+}
+get_article_next_file() {
+  next=`grep -B1 "$1" "$articles_sorted" | head -1`
+  if [ "$next" != "$1" ]; then
+    echo "$next"
+  fi
 }
 get_article_previous_file() {
   previous=`grep -A1 "$1" "$articles_sorted" | tail -1`
@@ -50,10 +65,16 @@ get_article_previous_file() {
     echo "$previous"
   fi
 }
-get_article_next_file() {
-  next=`grep -B1 "$1" "$articles_sorted" | head -1`
-  if [ "$next" != "$1" ]; then
+get_deleted_next_file() {
+  next=`grep -B1 "$1" "$articles_sorted_with_delete" | head -1`
+  if [ "`echo $deleted_files | grep -c \"$next\"`" = "0" ]; then
     echo "$next"
+  fi
+}
+get_deleted_previous_file() {
+  previous=`grep -A1 "$1" "$articles_sorted_with_delete" | tail -1`
+  if [ "`echo $deleted_files | grep -c \"$previous\"`" = "0" ]; then
+    echo "$previous"
   fi
 }
 get_article_title() {
@@ -82,8 +103,9 @@ replace_condition() {
 }
 
 replace_str() {
+  esc=`echo $2 | sed 's/\//\\\\\//g'`
   replace_condition "$1" "$2" | \
-    sed "s/<?fugitive\s\+$1\s*?>/$2/"
+    sed "s/<?fugitive\s\+$1\s*?>/$esc/g"
 }
 
 # REMEMBER: 2nd arg should be a tempfile!
@@ -175,7 +197,65 @@ replace_foreach_article() {
   rm "$foreach_body" "$tmpfile"
 }
 
+generate_static() {
+  if [ "$preproc" != "" ]; then
+    preproc_bak=`tempfile -p "fugitive" -d "$articles_dir"`
+    mv "$1" "$preproc_bak"
+    ($preproc) < "$preproc_bak" > "$1"
+  fi
+  art="${1#$articles_dir/}"
+  cat "$templates_dir/article.html" | \
+    replace_file "article_content" "`get_article_content \"$art\"`" | \
+    replace_includes | \
+    replace_commit_info | \
+    replace_article_info "$art" | \
+    sed "/^\s*$/d" > "$public_dir/$art.html"
+  if [ "$preproc" != "" ]; then mv "$preproc_bak" "$1"; fi
+}
+
+regenerate_previous_and_next_file_maybe() {
+  if [ "$1" != "" -a \
+       "`grep -c \"$1\" \"$generated_files\"`" = "0" ]; then
+    echo -n "[fugitive] Regenerating $public_dir/$1.html"
+    echo -n " (as previous article) from $articles_dir/$1... "
+    generate_static "$articles_dir/$1"
+    echo "done."
+    echo "$1" >> "$generated_files"
+  fi
+  if [ "$2" != "" -a \
+       "`grep -c \"$2\" \"$generated_files\"`" = "0" ]; then
+    echo -n "[fugitive] Regenerating $public_dir/$2.html"
+    echo -n " (as next article) from $articles_dir/$2... "
+    generate_static "$articles_dir/$2"
+    echo "done."
+    echo "$2" >> "$generated_files"
+  fi
+}
+
 modification=0
+
+for f in $added_files $modified_files; do
+  if [ "$f" != "${f#$articles_dir}" ]; then
+    modification=$((modification + 1))
+    echo -n "[fugitive] Generating $public_dir/${f#$articles_dir/}.html from"
+    echo -n " $f... "
+    generate_static "$f"
+    echo "done."
+    echo "${f#$articles_dir/}" >> "$generated_files"
+  fi
+done
+
+for f in $added_files; do
+  if [ "$f" != "${f#$articles_dir}" ]; then
+    art="${f#$articles_dir/}"
+    echo -n "[fugitive] Adding $art.html to git ignore list... "
+    echo "$art.html" >> .git/info/exclude
+    echo "done."
+    previous=`get_article_previous_file "$art"`
+    next=`get_article_next_file "$art"`
+    regenerate_previous_and_next_file_maybe "$previous" "$next"
+  fi
+done
 
 for f in $deleted_files; do
   if [ "$f" != "${f#$articles_dir}" ]; then
@@ -187,35 +267,10 @@ for f in $deleted_files; do
     echo -n "[fugitive] Removing $art.html from git ignore list... "
     sed -i "/^$art.html$/d" .git/info/exclude
     echo "done."
+    previous=`get_deleted_previous_file "$art"`
+    next=`get_deleted_next_file "$art"`
+    regenerate_previous_and_next_file_maybe "$previous" "$next"
   fi
-done
-
-new=$RANDOM.$$
-for f in $added_files $new $modified_files; do
-  if [ "$f" != "${f#$articles_dir}" ]; then
-    modification=$((modification + 1))
-    if [ "$preproc" != "" ]; then
-      preproc_bak=`tempfile -p "fugitive" -d "$articles_dir"`
-      mv "$f" "$preproc_bak"
-      ($preproc) < "$preproc_bak" > "$f"
-    fi
-    art="${f#$articles_dir/}"
-    echo -n "[fugitive] Generating $public_dir/$art.html from $f... "
-    cat "$templates_dir/article.html" | \
-      replace_file "article_content" "`get_article_content \"$art\"`" | \
-      replace_includes | \
-      replace_commit_info | \
-      replace_article_info "$art" | \
-      sed "/^\s*$/d" > "$public_dir/$art.html"
-    echo "done."
-    if [ "$new" != "" ]; then
-      echo -n "[fugitive] Adding $art.html to git ignore list... "
-      echo "$art.html" >> .git/info/exclude
-      echo "done."
-    fi
-    if [ "$preproc" != "" ]; then mv "$preproc_bak" "$f"; fi
-  fi
-  if [ "$f" = "$new" ]; then new=""; fi
 done
 
 if [ $modification -gt 0 ]; then
@@ -233,3 +288,5 @@ if [ $modification -gt 0 ]; then
   echo "[fugitive] Blog update complete."
 fi
 rm "$articles_sorted"
+rm "$articles_sorted_with_delete"
+rm "$generated_files"
