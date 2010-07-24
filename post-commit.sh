@@ -66,7 +66,7 @@ get_article_content() {
   echo "$tmp"
 }
 
-process_condition() {
+replace_condition() {
   if [ "$2" = "" ]; then
     sed "s/<?fugitive\s\+\(end\)\?ifset:$1\s*?>/\n\0\n/g" | \
       sed "/<?fugitive\s\+ifset:$1\s*?>/,/<?fugitive\s\+endifset:$1\s*?>/bdel
@@ -81,9 +81,10 @@ process_condition() {
 }
 
 replace_str() {
-  process_condition "$1" "$2" | \
+  replace_condition "$1" "$2" | \
     sed "s/<?fugitive\s\+$1\s*?>/$2/"
 }
+
 # REMEMBER: 2nd arg should be a tempfile!
 replace_file() {
   sed "/<?fugitive\s\+$1\s*?>/ {
@@ -91,6 +92,11 @@ replace_file() {
     d }"
   rm "$2"
 }
+
+replace_includes() {
+  cat
+}
+
 replace_commit_info() {
   commit_body=`get_commit_body`
   replace_str "commit_Hash" "$commit_Hash" | \
@@ -105,6 +111,7 @@ replace_commit_info() {
     replace_str "commit_slug" "$commit_slug" | \
     replace_file "commit_body" "$commit_body"
 }
+
 replace_article_info() {
   article_title=`get_article_title "$1"`
   article_cdatetime=`get_article_info "%ai" "$1" | tail -1`
@@ -127,7 +134,8 @@ replace_article_info() {
   article_next_file=`get_article_next_file "$1"`
   article_next_title=`get_article_title "$article_next_file"`
   
-  replace_str "article_title" "$article_title" | \
+  replace_str "article_file" "$1" | \
+    replace_str "article_title" "$article_title" | \
     replace_str "article_cdatetime" "$article_cdatetime" | \
     replace_str "article_cdate" "$article_cdate" | \
     replace_str "article_ctime" "$article_ctime" | \
@@ -146,36 +154,75 @@ replace_article_info() {
     replace_str "article_next_title" "$article_next_title"
 }
 
-_echo() {
-  echo -ne "[fugitive] $*"
+replace_foreach_article() {
+  foreach_body=`tempfile -p "feb"`
+  tmpfile=`tempfile -p "tfil"`
+  temp=`tempfile -p "tmp"`
+  fa="foreach:article"
+  cat > "$temp"
+  cat "$temp" | \
+  sed "s/<?fugitive\s\+$fa\s*?>/<?fugitive foreach_body ?>\n\0/" | \
+    sed "/<?fugitive\s\+$fa\s*?>/,/<?fugitive\s\+end$fa\s*?>/d" | \
+    cat > "$tmpfile"
+  cat "$temp" | \
+    sed -n "/<?fugitive\s\+$fa\s*?>/,/<?fugitive\s\+end$fa\s*?>/p" | \
+    tail -n +2 | head -n -1 > "$foreach_body"
+  for a in `cat $articles_sorted`; do
+    cat "$foreach_body" | replace_article_info "$a"
+  done > "$temp"
+  cat "$tmpfile" | replace_file "foreach_body" "$temp"
+  rm "$foreach_body" "$tmpfile"
 }
+
+modification=0
 
 for f in $deleted_files; do
   if [ "$f" != "${f#$articles_dir}" ]; then
+    modification=$((modification + 1))
     art="${f#$articles_dir/}"
-    _echo "Deleting $public_dir/$art.html... "
+    echo -n "[fugitive] Deleting $public_dir/$art.html... "
     rm "$public_dir/$art.html"
+    echo "done."
+    echo -n "[fugitive] Removing $art.html from git ignore list... "
+    sed -i "/^$art.html$/d" .git/info/exclude
     echo "done."
   fi
 done
 
-for f in $added_files $modified_files; do
+new=$RANDOM.$$
+for f in $added_files $new $modified_files; do
   if [ "$f" != "${f#$articles_dir}" ]; then
+    modification=$((modification + 1))
     art="${f#$articles_dir/}"
-    _echo "Generating $public_dir/$art.html from $f... "
+    echo -n "[fugitive] Generating $public_dir/$art.html from $f... "
     cat "$templates_dir/article.html" | \
       replace_file "article_content" "`get_article_content \"$art\"`" | \
-      process_includes | \
+      replace_includes | \
       replace_commit_info | \
       replace_article_info "$art" | \
       sed "/^\s*$/d" > "$public_dir/$art.html"
     echo "done."
+    if [ "$new" != "" ]; then
+      echo -n "[fugitive] Adding $art.html to git ignore list... "
+      echo "$art.html" >> .git/info/exclude
+      echo "done."
+    fi
   fi
+  if [ "$f" = "$new" ]; then new=""; fi
 done
 
-_echo "Using last published article as index page"
-cp "$public_dir/`cat $articles_sorted | head -1` $public_dir/index.html"
-echo "done".
-
+if [ $modification -gt 0 ]; then
+  echo -n "[fugitive] Generating $public_dir/archives.html... "
+  cat "$templates_dir/archives.html" | \
+    replace_includes | \
+    replace_foreach_article | \
+    replace_commit_info | \
+    sed "/^\s*$/d" > "$public_dir/archives.html"
+  echo "done."
+  
+  echo -n "[fugitive] Using last published article as index page... "
+  cp "$public_dir/`head -1 $articles_sorted`.html" "$public_dir/index.html"
+  echo "done".
+  echo "[fugitive] Blog update complete."
+fi
 rm "$articles_sorted"
-_echo "Blog update complete.\n"

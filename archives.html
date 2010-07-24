@@ -27,14 +27,14 @@
         </header>
         <div>
           <dl>
-            <?fugitive multi-start ?>
+            <?fugitive foreach:article ?>
             <dt>
               <time datetime="<?fugitive article_cdatetime ?>">
                 <?fugitive article_cdate ?> at <?fugitive article_ctime ?>
               </time>
             </dt>
             <dd>
-              <a href="<?fugitive article_url ?>">
+              <a href="<?fugitive article_file ?>.html">
                 <?fugitive article_title ?>
               </a>
               <?fugitive ifset:article_mdatetime ?>
@@ -45,7 +45,7 @@
               </small>
               <?fugitive endifset:article_mdatetime ?>
             </dd>
-            <?fugitive multi-end ?>
+            <?fugitive endforeach:article ?>
           </dl>
         </div>
       </article>
