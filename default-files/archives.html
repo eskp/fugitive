@@ -21,16 +21,7 @@
   </head>
   <body>
     <div id="container">
-      <nav>
-        <ul>
-          <li><a href="index.html">home</a></li>
-          <li>archives</li>
-        </ul>
-      </nav>
-      <header>
-        <h1><?fugitive-install name ?>'s blog</h1>
-        <q>fugitive: a blog engine for hackers.</q>
-      </header>
+      <?fugitive include:nav-header.html ?>
       <article>
         <header>
           <h1>Archives</h1>
@@ -59,19 +50,7 @@
           </dl>
         </div>
       </article>
-      <footer>
-        <p>
-          <a href="http://www.gnu.org/copyleft/copyleft.html">copyleft</a>
-          <?fugitive-install name ?> <?fugitive-install year ?>
-          &mdash;
-          powered by <a href="http://gitorious.org/fugitive">fugitive</a>
-        </p>
-        <p>
-          last build was <?fugitive commit_hash ?>
-          at <time><?fugitive commit_datetime ?></time>,<br />
-          subject was <q><?fugitive commit_subject ?></q>
-        </p>
-      </footer>
+      <?fugitive include:footer.html ?>
     </div>
   </body>
 </html>

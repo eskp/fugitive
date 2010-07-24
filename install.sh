@@ -1,13 +1,13 @@
 #!/bin/sh
 
-replace_var_by_string() {
+replace_string() {
   sed "s/<?fugitive-install\s\+$1\s*?>/$2/"
 }
 
 fugitive_write_template() {
   name=`git config --get user.name`
-  base64 -d | gunzip | replace_var_by_string name "$name" | \
-    replace_var_by_string year "`date +%Y`"
+  base64 -d | gunzip | replace_string "name" "$name" | \
+    replace_string "year" "`date +%Y`"
 }
 
 fugitive_install_hooks() {
@@ -46,10 +46,16 @@ fugitive_install() {
   echo "done."
   echo -n "Writing default template files... "
   fugitive_write_template > _templates/article.html <<EOF
-#INCLUDE:article.html#
+#INCLUDE:default-files/article.html#
 EOF
   fugitive_write_template > _templates/archives.html <<EOF
-#INCLUDE:archives.html#
+#INCLUDE:default-files/archives.html#
+EOF
+  fugitive_write_template > _templates/nav-header.html <<EOF
+#INCLUDE:default-files/nav-header.html#
+EOF
+  fugitive_write_template > _templates/footer.html <<EOF
+#INCLUDE:default-files/footer.html#
 EOF
   echo "done."
   echo -n "Writing dummy article (README)... "
@@ -59,10 +65,10 @@ EOF
   echo "done."
   echo -n "Writing default css files... "
   (base64 -d | gunzip) > fugitive.css <<EOF
-#INCLUDE:fugitive.css#
+#INCLUDE:default-files/fugitive.css#
 EOF
   (base64 -d | gunzip) > print.css <<EOF
-#INCLUDE:print.css#
+#INCLUDE:default-files/print.css#
 EOF
   echo "done."
   fugitive_install_hooks
