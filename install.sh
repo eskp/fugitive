@@ -47,6 +47,11 @@ EOF
 #INCLUDE:archives.html#
 EOF
   echo "done."
+  echo -n "Writing dummy article (README)... "
+  (base64 -d | gunzip) > _articles/README <<EOF
+#INCLUDE:README#
+EOF
+  echo "done."
   echo -n "Writing default css files... "
   (base64 -d | gunzip) > fugitive.css <<EOF
 #INCLUDE:fugitive.css#
@@ -60,8 +65,8 @@ EOF
   git add _templates/* fugitive.css print.css >/dev/null
   git commit -m "fugitive inital import" >/dev/null
   echo "done."
-  echo -n "Preventing git to track temp files... "
-  echo "*~" > .git/info/exclude
+  echo -n "Preventing git to track temporary and generated files... "
+  echo "*~\nindex.html\narchives.html" > .git/info/exclude
   echo "done."
   cd - >/dev/null
   echo "Installation complete, please see the README file for an howto."
