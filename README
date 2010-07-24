@@ -1,75 +1,88 @@
-INFO
-====
+fugitive README file
 
-fugitive is a blog engine running on top of git using hooks to generate static
-html pages and thus having only git as dependency.
+<h2>Info</h2>
+<p>
+  fugitive is a blog engine running on top of git using hooks to generate
+  static html pages and thus having only git as dependency.
+</p>
 
+<h2>Install</h2>
 
-INSTALL
-=======
+<h3>Build</h3>
+<p>
+  If you want to build fugitive from the source, clone the git repository:
+  <br />
+  <code>git clone git://gitorious.org/fugitive/fugitive.git fugitive</code>
+  <br />
+  Then simply go in the newly created directory: <code>cd fugitive</code>, and
+  run the build script: <code>./build.sh</code>.
+  <br />
+  This will generate an executable file &quot;fugitive&quot;.
+</p>
+<h3>Create a blog</h3>
+<p>
+  If you have the &quot;fugitive&quot; executable file and want to start a new
+  blog: Run <code>fugitive --install &lt;dir&gt;</code>.
+  <br />
+  This will create the git repos with appropriate hooks and files in
+  &lt;dir&gt;.
+  <br />
+  If &lt;dir&gt; isn't specified then the current working directory is used.
+<p>
+<p>
+  <strong>NOTE:</strong> You need to use the same process to install any remote
+  repository where you'd like to push your blog.
+</p>
+<h3>Update</h3>
+<p>
+  Simply run <code>fugitive --install-hooks &lt;dir&gt;</code>.<br />
+  This will only (re)install fugitive hooks scripts.<br />
+  If &lt;dir&gt; isn't specified then the current working directory is used.
+</p>
 
-Build
------
-If you want to build fugitive from the source, clone the git repository:
-`git clone git://gitorious.org/fugitive/fugitive.git fugitive`
-Then simply go in the newly created directory: `cd fugitive`, and run the build
-script: `./build.sh`.
-This will generate an executable file "fugitive".
+<h2>Configuration</h2>
 
-Create a blog
--------------
-If you have the "fugitive" executable file and want to start a new blog:
-Run `fugitive --install <dir>`.
-This will create the git repos with appropriate hooks and files in <dir>.
-If <dir> isn't specified then the current working directory is used.
+<p>
+  There are three item in the "fugitive" section of the git config:
+</p>
+<ul>
+  <li>
+    "public-dir" is the path to the directory that will contain the generated
+    html files. Defautlt value is ".", the root of the git repository. You
+    could set it to "blog" for instance if you already have a static website
+    under your git repos.
+  </li>
+  <li>
+    "articles-dir" is the path where fugitive will look for published articles.
+    Default value is "_articles". This path is relative to the root of the git
+    repository, must be in it and must not start with ".".
+  </li>
+  <li>
+    "templates-dir" is the path where fugitive will look for templates files.
+    Default value is "_templates". This path is relative to the root of the git
+    repository, must be in it and must not start with ".".
+  </li>
+</ul>
+<p>
+  <strong>NOTE:</strong> You must NOT put a trailing '/' at the end of any of
+  those paths.
+</p>
 
-NOTE: You need to use the same process to install any remote repository where
-you'd like to push your blog.
+<h2>Usage</h2>
 
-Update
-------
-Simply run `fugitive --install-hooks <dir>`.
-This will only (re)install fugitive hooks scripts.
-If <dir> isn't specified then the current working directory is used.
-
-
-CONFIGURATION
-=============
-
-There are three item in the "fugitive" section of the git config:
-
- - "public-dir" is the path to the directory that will contain the generated
-   html files. Defautlt value is ".", the root of the git repository. You
-   could set it to "blog" for instance if you already have a static website
-   under your git repos.
-
- - "articles-dir" is the path where fugitive will look for published articles.
-   Default value is "_articles". This path is relative to the root of
-   the git repository, must be in it and must not start with ".".
-
- - "templates-dir" is the path where fugitive will look for templates files.
-   Default value is "_templates". This path is relative to the root of
-   the git repository, must be in it and must not start with ".".
-
-NOTE: You must NOT put a trailing '/' at the end of any of those paths.
-
-
-USAGE
-=====
-
-General use
------------
-
-Article you want to publish should be file without the .html extension in the
-"articles-dir" directory (see CONFIGURATION).
-
-The first line of the file will be used as title and the rest of the file as
-the content.
-
-/!\ WARNING: DO NOT CREATE AN ARTICLE FILE NAMED "archives"
-/!\ WARNING: DO NOT CREATE AN ARTICLE FILE NAMED "index"
-
-Template system
----------------
-*TODO*
-
+<h3>General use</h3>
+<p>
+  Article you want to publish should be file without the .html extension in the
+  "articles-dir" directory (see CONFIGURATION).
+</p>
+<p>
+  The first line of the file will be used as title and the rest of the file as
+  the content.
+</p>
+<p>
+  <strong>/!\ WARNINGS:</strong><br />
+  DO NOT CREATE AN ARTICLE FILE NAMED "archives".<br />
+  DO NOT CREATE AN ARTICLE FILE NAMED "index".
+</p>
+<h3>Template system</h3>
+<p><em>*TODO*</em></p>
