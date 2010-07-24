@@ -99,11 +99,11 @@ article > div h2 {
   font-size: 1.4em;
   font-weight: normal;
   counter-increment: section;
+  counter-reset: subsection;
 }
 article > div h2:before {
   display: inline;
   content: counter(section) ". ";
-  counter-reset: subsection;
 }
 article > div h3 {
   margin: 1em 0 0.5em 0;
