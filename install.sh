@@ -72,15 +72,15 @@ EOF
 EOF
   echo "done."
   fugitive_install_hooks
-  echo -n "Importing files into git repository... "
-  git add _templates/* fugitive.css print.css >/dev/null
-  git commit -m "fugitive inital import" >/dev/null
-  echo "done."
   echo -n "Preventing git to track temporary and generated files... "
   echo "*~\nindex.html\narchives.html" > .git/info/exclude
   echo "done."
+  echo "Importing files into git repository... "
+  git add _templates/* fugitive.css print.css >/dev/null
+  git commit -m "fugitive inital import" >/dev/null
+  echo "First import finished."
   cd - >/dev/null
-  echo "Installation complete, please see the README file for an howto."
+  echo 'Installation complete!'
 }
 
 case "$1" in
