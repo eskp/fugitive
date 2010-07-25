@@ -256,7 +256,7 @@ replace_foreach () {
   rm "$foreach_body" "$tmpfile"
 }
 
-generate_static() {
+generate_article() {
   if [ "$preproc" != "" ]; then
     preproc_bak=`tempfile -p "fugitive" -d "$articles_dir"`
     mv "$1" "$preproc_bak"
@@ -272,12 +272,12 @@ generate_static() {
   if [ "$preproc" != "" ]; then mv "$preproc_bak" "$1"; fi
 }
 
-regenerate_previous_and_next_file_maybe() {
+regenerate_previous_and_next_article_maybe() {
   if [ "$1" != "" -a \
        "`grep -c \"$1\" \"$generated_files\"`" = "0" ]; then
     echo -n "[fugitive] Regenerating $public_dir/$1.html"
     echo -n " (as previous article) from $articles_dir/$1... "
-    generate_static "$articles_dir/$1"
+    generate_article "$articles_dir/$1"
     echo "done."
     echo "$1" >> "$generated_files"
   fi
@@ -285,7 +285,7 @@ regenerate_previous_and_next_file_maybe() {
        "`grep -c \"$2\" \"$generated_files\"`" = "0" ]; then
     echo -n "[fugitive] Regenerating $public_dir/$2.html"
     echo -n " (as next article) from $articles_dir/$2... "
-    generate_static "$articles_dir/$2"
+    generate_article "$articles_dir/$2"
     echo "done."
     echo "$2" >> "$generated_files"
   fi
@@ -298,7 +298,7 @@ for f in $added_files $modified_files; do
     modification=$((modification + 1))
     echo -n "[fugitive] Generating $public_dir/${f#$articles_dir/}.html from"
     echo -n " $f... "
-    generate_static "$f"
+    generate_article "$f"
     echo "done."
     echo "${f#$articles_dir/}" >> "$generated_files"
   fi
@@ -312,7 +312,7 @@ for f in $added_files; do
     echo "done."
     previous=`get_article_previous_file "$art"`
     next=`get_article_next_file "$art"`
-    regenerate_previous_and_next_file_maybe "$previous" "$next"
+    regenerate_previous_and_next_article_maybe "$previous" "$next"
   fi
 done
 
@@ -328,7 +328,7 @@ for f in $deleted_files; do
     echo "done."
     previous=`get_deleted_previous_file "$art"`
     next=`get_deleted_next_file "$art"`
-    regenerate_previous_and_next_file_maybe "$previous" "$next"
+    regenerate_previous_and_next_article_maybe "$previous" "$next"
   fi
 done
 
