@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+
+    <title><?fugitive-install name ?>'s blog rss feed</title>
+    <link><?fugitive blog_url ?></link>
+    <description>5 last published articles</description>
+    <generator>fugitive - http://gitorious.org/fugitive</generator>
+    <lastBuildDate><?fugitive commit_date ?></lastBuildDate>
+
+    <?fugitive foreach:article ?>
+    <item>
+      <title><![CDATA[<?fugitive article_title ?>]]></title>
+      <link><?fugitive blog_url ?><?fugitive article_file ?>.html</link>
+      <description><![CDATA[<?fugitive article_content ?>]]></description>
+      <author><?fugitive article_cauthor ?></author>
+      <guid><?fugitive blog_url ?><?fugitive article_file ?>.html</guid>
+      <pubDate><?fugitive article_cdatetime ?></pubDate>
+    </item>
+    <?fugitive endforeach:article ?>
+
+  </channel>
+</rss>

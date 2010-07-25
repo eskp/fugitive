@@ -1,12 +1,12 @@
 fugitive README file
 
-<h2>Info</h2>
+<h2 id="info">Info</h2>
 <p>
   fugitive is a blog engine running on top of git using hooks to generate
   static html pages and thus having only git as dependency.
 </p>
 
-<h2>Install</h2>
+<h2 id="install">Install</h2>
 
 <h3>Build</h3>
 <p>
@@ -28,9 +28,14 @@ fugitive README file
   &lt;dir&gt;.
   <br />
   If &lt;dir&gt; isn't specified then the current working directory is used.
-<p>
-<p>
-  <strong>NOTE:</strong> You need to use the same process to install any remote
+</p>
+<p class="important">
+  Once you have installed your blog you need to set the <em>blog-url</em>
+  parameter in your git configuration. See <a href="#config">configuration</a>
+  for details.
+</p>
+<p class="note">
+  You need to use the same process to install any remote
   repository where you'd like to push your blog.
 </p>
 <h3>Update</h3>
@@ -40,42 +45,52 @@ fugitive README file
   If &lt;dir&gt; isn't specified then the current working directory is used.
 </p>
 
-<h2>Configuration</h2>
+<h2 id="config">Configuration</h2>
 
 <p>
-  There are three paths in the &quot;fugitive&quot; section of the git config:
+  All this settings are in the &quot;fugitive&quot; section of the git config.
+  You can change them with the command <code>git config
+  fugitive.<em>parameter</em> <em>value</em></code>, where <em>parameter</em>
+  is one of the following:
 </p>
-<ul>
-  <li>
-    <em>public-dir</em> is the path to the directory that will contain the
-    generated html files. Defautlt value is &quot;.&quot;, the root of the git
-    repository. You could set it to &quot;blog&quot; for instance if you
-    already have a static website under your git repos.
-  </li>
-  <li>
-    <em>articles-dir</em> is the path where fugitive will look for published
-    articles. Default value is &quot;_articles&quot;. This path is relative to
-    the root of the git repository, must be in it and must not start with
-    &quot;.&quot;.
-  </li>
-  <li>
-    <em>templates-dire</em> is the path where fugitive will look for templates
-    files. Default value is &quot;_templates&quot;. This path is relative to
-    the root of the git repository, must be in it and must not start with
-    &quot;.&quot;.
-  </li>
-</ul>
-<p>
-  <strong>NOTE:</strong> You must NOT put a trailing '/' at the end of any of
-  those paths.
-</p>
-<p>
-  If you want your article to be preprocessed by an external tool (markdown,
-  textile...) you need to set <em>preproc</em> to a command line that will read
-  on stdin and write to stdout.
+<dl>
+  <dt>blog-url</dt>
+  <dd>
+    This is the public url of the generated blog. <strong>You need to set
+    it</strong> as soon as possible since it's required for the RSS feed (and
+    used in the default template's footer).
+  </dd>
+  <dt>public-dir</dt>
+  <dd>
+    This is the path to the directory that will contain the generated html
+    files. Defautlt value is &quot;.&quot;, the root of the git repository. You
+    could set it to &quot;blog&quot; for instance if you already have a static
+    website under your git repos.
+  </dd>
+  <dt>articles-dir</dt>
+  <dd>
+    This is the path where fugitive will look for published articles. Default
+    value is &quot;_articles&quot;. This path is relative to the root of the
+    git repository, must be in it and must not start with &quot;.&quot;.
+  </dd>
+  <dt>templates-dire</dt>
+  <dd>
+    This is the path where fugitive will look for templates files. Default
+    value is &quot;_templates&quot;. This path is relative to the root of the
+    git repository, must be in it and must not start with &quot;.&quot;.
+  </dd>
+  <dt>preproc</dt>
+  <dd>
+    If you want your article to be preprocessed by an external tool (markdown,
+    textile...) you need to set <em>preproc</em> to a command line that will
+    read on stdin and write to stdout.
+  </dd>
+</dl>
+<p class="note">
+  You must NOT put a trailing '/' at the end of any of the path.
 </p>
 
-<h2>Usage</h2>
+<h2 id="usage">Usage</h2>
 
 <h3>General use</h3>
 <p>
@@ -86,8 +101,7 @@ fugitive README file
   The first line of the file will be used as title and the rest of the file as
   the content.
 </p>
-<p>
-  <strong>/!\ WARNINGS:</strong><br />
+<p class="warning">
   DO NOT CREATE AN ARTICLE FILE NAMED &quot;archives&quot;.<br />
   DO NOT CREATE AN ARTICLE FILE NAMED &quot;index&quot;.
 </p>

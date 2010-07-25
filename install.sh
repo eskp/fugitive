@@ -39,6 +39,7 @@ fugitive_install() {
   mkdir -p _drafts _articles _templates
   echo "done."
   echo -n "Adding default directory paths and settings to git config... "
+  git config --add --path fugitive.blog-url "http://localhost/fugitive/"
   git config --add --path fugitive.templates-dir "_templates"
   git config --add --path fugitive.articles-dir "_articles"
   git config --add --path fugitive.public-dir "."
@@ -51,16 +52,14 @@ EOF
   fugitive_write_template > _templates/archives.html <<EOF
 #INCLUDE:default-files/archives.html#
 EOF
-  fugitive_write_template > _templates/nav-header.html <<EOF
-#INCLUDE:default-files/nav-header.html#
+  fugitive_write_template > _templates/top.html <<EOF
+#INCLUDE:default-files/top.html#
 EOF
-  fugitive_write_template > _templates/footer.html <<EOF
-#INCLUDE:default-files/footer.html#
+  fugitive_write_template > _templates/bottom.html <<EOF
+#INCLUDE:default-files/bottom.html#
 EOF
-  echo "done."
-  echo -n "Writing dummy article (README)... "
-  (base64 -d | gunzip) > _articles/README <<EOF
-#INCLUDE:README#
+  fugitive_write_template > _templates/feed.xml <<EOF
+#INCLUDE:default-files/feed.xml#
 EOF
   echo "done."
   echo -n "Writing default css files... "
@@ -72,15 +71,22 @@ EOF
 EOF
   echo "done."
   fugitive_install_hooks
+  echo -n "Importing files into git repository... "
+  git add _templates/* fugitive.css print.css >/dev/null
+  git commit -m "fugitive inital import" >/dev/null
+  echo "done."
   echo -n "Preventing git to track temporary and generated files... "
   echo "*~\nindex.html\narchives.html" > .git/info/exclude
   echo "done."
-  echo "Importing files into git repository... "
-  git add _templates/* fugitive.css print.css >/dev/null
-  git commit -m "fugitive inital import" >/dev/null
-  echo "First import finished."
+  echo "Writing dummy article (README) and adding it to the repos... "
+  (base64 -d | gunzip) > _articles/README <<EOF
+#INCLUDE:README#
+EOF
+  git add _articles/README
+  git ci -m "fugitive fresh install" >/dev/null
+  echo "done."
   cd - >/dev/null
-  echo 'Installation complete!'
+  echo 'Installation almost complete, please visit your blog :-).'
 }
 
 case "$1" in

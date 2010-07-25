@@ -1,5 +1,6 @@
 #!/bin/sh
 
+blog_url=`git config --get fugitive.blog-url`
 public_dir=`git config --get fugitive.public-dir`
 if [ ! -d "$public_dir" ]; then mkdir -p "$public_dir"; fi
 templates_dir=`git config --get fugitive.templates-dir`
@@ -13,10 +14,6 @@ modified_files=`git log -1 --name-status --pretty="format:" | grep -E '^M' | \
 deleted_files=`git log -1 --name-status --pretty="format:" | grep -E '^D' | \
   cut -f2`
 generated_files=`tempfile -p "fugitive"`
-
-sanit_mail() {
-  sed "s/@/[at]/;s/\./(dot)/"
-}
 
 articles_sorted=`tempfile -p "fugitive"`
 for f in $articles_dir/*; do
@@ -84,6 +81,10 @@ get_commit_body() {
   if [ "`cat \"$tmp\" | sed \"/^$/d\" | wc -l`" != "0" ]; then
     echo "$tmp"
   fi
+}
+
+sanit_mail() {
+  sed "s/@/[at]/;s/\./(dot)/"
 }
 
 replace_condition() {
@@ -190,7 +191,8 @@ replace_article_info() {
   article_next_file=`get_article_next_file "$1"`
   article_next_title=`get_article_title "$article_next_file"`
 
-  replace_str "article_file" "$1" | \
+  replace_file "article_content" "`get_article_content \"$1\"`" | \
+    replace_str "article_file" "$1" | \
     replace_str "article_title" "$article_title" | \
     replace_str "article_cdatetime" "$article_cdatetime" | \
     replace_str "article_cdate" "$article_cdate" | \
@@ -264,9 +266,9 @@ generate_article() {
   fi
   art="${1#$articles_dir/}"
   cat "$templates_dir/article.html" | \
-    replace_file "article_content" "`get_article_content \"$art\"`" | \
     replace_includes | \
     replace_str "page_title" "`get_article_title \"$art\"`" | \
+    replace_str "blog_url" "$blog_url" | \
     replace_commit_info "-1" | \
     replace_article_info "$art" | \
     sed "/^\s*$/d" > "$public_dir/$art.html"
@@ -341,10 +343,23 @@ if [ $modification -gt 0 ]; then
     replace_foreach "commit" "$commits" | \
     replace_empty_article_info | \
     replace_str "page_title" "archives" | \
+    replace_str "blog_url" "$blog_url" | \
     replace_commit_info "-1" | \
     sed "/^\s*$/d" > "$public_dir/archives.html"
   echo "done."
-
+  echo -n "[fugitive] Generating $public_dir/feed.xml... "
+  last_5_articles=`tempfile -p "fugitive"`
+  head -5 "$articles_sorted" > "$last_5_articles"
+  last_5_commits=`tempfile -p "fugitive"`
+  head -5 "$commits" > "$last_5_commits"
+  cat "$templates_dir/feed.xml" | \
+    replace_foreach "article" "$last_5_articles" | \
+    replace_foreach "commit" "$last_5_commits" | \
+    replace_str "blog_url" "$blog_url" | \
+    replace_commit_info "-1" | \
+    sed "/^\s*$/d" > "$public_dir/feed.xml"
+  echo "done."
+  rm "$last_5_articles" "$last_5_commits"
   echo -n "[fugitive] Using last published article as index page... "
   cp "$public_dir/`head -1 $articles_sorted`.html" "$public_dir/index.html"
   echo "done".

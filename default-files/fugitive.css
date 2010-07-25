@@ -124,6 +124,29 @@ article > div p {
   margin: 1em 0;
   text-indent: 2em;
 }
+article > div p.important:before {
+  content: "important: ";
+  color: #f00;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+article > div p.warning:before {
+  content: "warning: ";
+  color: #fa0;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+article > div p.info:before {
+  content: "info: ";
+  color: #080;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+article > div p.note:before {
+  content: "note: ";
+  font-weight: bold;
+  font-variant: small-caps;
+}
 article > div ul {
   margin: 1em 0;
   padding: 0 0 0 3em;
