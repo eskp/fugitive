@@ -18,22 +18,6 @@ sanit_mail() {
   sed "s/@/[at]/;s/\./(dot)/"
 }
 
-commit_Hash=`git log -1 --format="%H"`
-commit_hash=`git log -1 --format="%h"`
-commit_author=`git log -1 --format="%an"`
-commit_author_email=`git log -1 --format="%ae" | sanit_mail`
-commit_datetime=`git log -1 --format="%ai"`
-commit_date=`git log -1 --format="%ad" --date="short"`
-commit_time=`git log -1 --format="%ai" | cut -d' ' -f2`
-commit_timestamp=`git log -1 --format="%at"`
-commit_subject=`git log -1 --format="%s"`
-commit_slug=`git log -1 --format="%f"`
-get_commit_body() {
-  tmp=`tempfile -p "fugitive"`
-  git log -1 --format="%b" > "$tmp"
-  echo "$tmp"
-}
-
 articles_sorted=`tempfile -p "fugitive"`
 for f in $articles_dir/*; do
   ts=`git log --format="%at" -- "$f" | tail -1`
@@ -49,6 +33,9 @@ for f in $articles_dir/* $deleted_files; do
     echo "$ts ${f#$articles_dir/}"
   fi
 done | sort -nr | cut -d' ' -f2 > "$articles_sorted_with_delete"
+
+commits=`tempfile -p "fugitive"`
+git log --oneline | cut -d' ' -f1 > "$commits"
 
 get_article_info() {
   git log --format="$1" -- "$articles_dir/$2"
@@ -88,6 +75,17 @@ get_article_content() {
   echo "$tmp"
 }
 
+get_commit_info() {
+  git show --quiet --format="$1" "$2"
+}
+get_commit_body() {
+  tmp=`tempfile -p "fugitive"`
+  git show --quiet --format="%b" "$1" > "$tmp"
+  if [ "`cat \"$tmp\" | sed \"/^$/d\" | wc -l`" != "0" ]; then
+    echo "$tmp"
+  fi
+}
+
 replace_condition() {
   if [ "$2" = "" ]; then
     sed "s/<?fugitive\s\+\(end\)\?ifset:$1\s*?>/\n\0\n/g" | \
@@ -110,11 +108,15 @@ replace_str() {
 
 # REMEMBER: 2nd arg should be a tempfile!
 replace_file() {
-  sed "s/<?fugitive\s\+$1\s*?>/\n\0\n/g" | \
-    sed "/<?fugitive\s\+$1\s*?>/ {
-      r $2
-      d }"
-  rm "$2"
+  if [ -f "$2" ]; then
+    sed "s/<?fugitive\s\+$1\s*?>/\n\0\n/g" | \
+      sed "/<?fugitive\s\+$1\s*?>/ {
+        r $2
+        d }"
+    rm "$2"
+  else
+    cat
+  fi
 }
 
 replace_includes() {
@@ -141,7 +143,18 @@ replace_includes() {
 }
 
 replace_commit_info() {
-  commit_body=`get_commit_body`
+  commit_Hash=`get_commit_info "%H" "$1"`
+  commit_hash=`get_commit_info "%h" "$1"`
+  commit_author=`get_commit_info "%an" "$1"`
+  commit_author_email=`get_commit_info "%ae" "$1" | sanit_mail`
+  commit_datetime=`get_commit_info "%ai" "$1"`
+  commit_date=`echo $commit_datetime | cut -d' ' -f1`
+  commit_time=`echo $commit_datetime | cut -d' ' -f2`
+  commit_timestamp=`get_commit_info "%at" "$1"`
+  commit_subject=`get_commit_info "%s" "$1"`
+  commit_slug=`get_commit_info "%f" "$1"`
+  commit_body=`get_commit_body "$1"`
+  
   replace_str "commit_Hash" "$commit_Hash" | \
     replace_str "commit_hash" "$commit_hash" | \
     replace_str "commit_author" "$commit_author" | \
@@ -176,7 +189,7 @@ replace_article_info() {
   article_previous_title=`get_article_title "$article_previous_file"`
   article_next_file=`get_article_next_file "$1"`
   article_next_title=`get_article_title "$article_next_file"`
-  
+
   replace_str "article_file" "$1" | \
     replace_str "article_title" "$article_title" | \
     replace_str "article_cdatetime" "$article_cdatetime" | \
@@ -218,21 +231,21 @@ replace_empty_article_info() {
     replace_str "article_next_title" ""
 }
 
-replace_foreach_article() {
-  foreach_body=`tempfile -p "feb"`
-  tmpfile=`tempfile -p "tfil"`
-  temp=`tempfile -p "tmp"`
-  fa="foreach:article"
+replace_foreach () {
+  foreach_body=`tempfile -p "fugitive"`
+  tmpfile=`tempfile -p "fugitive"`
+  temp=`tempfile -p "fugitive"`
+  fe="foreach:$1"
   cat > "$temp"
   cat "$temp" | \
-  sed "s/<?fugitive\s\+$fa\s*?>/<?fugitive foreach_body ?>\n\0/" | \
-    sed "/<?fugitive\s\+$fa\s*?>/,/<?fugitive\s\+end$fa\s*?>/d" | \
+  sed "s/<?fugitive\s\+$fe\s*?>/<?fugitive foreach_body ?>\n\0/" | \
+    sed "/<?fugitive\s\+$fe\s*?>/,/<?fugitive\s\+end$fe\s*?>/d" | \
     cat > "$tmpfile"
   cat "$temp" | \
-    sed -n "/<?fugitive\s\+$fa\s*?>/,/<?fugitive\s\+end$fa\s*?>/p" | \
+    sed -n "/<?fugitive\s\+$fe\s*?>/,/<?fugitive\s\+end$fe\s*?>/p" | \
     tail -n +2 | head -n -1 > "$foreach_body"
-  for a in `cat $articles_sorted`; do
-    cat "$foreach_body" | replace_article_info "$a"
+  for i in `cat "$2"`; do
+    cat "$foreach_body" | replace_$1_info "$i"
   done > "$temp"
   cat "$tmpfile" | replace_file "foreach_body" "$temp"
   rm "$foreach_body" "$tmpfile"
@@ -248,7 +261,7 @@ generate_static() {
   cat "$templates_dir/article.html" | \
     replace_file "article_content" "`get_article_content \"$art\"`" | \
     replace_includes | \
-    replace_commit_info | \
+    replace_commit_info "-1" | \
     replace_article_info "$art" | \
     sed "/^\s*$/d" > "$public_dir/$art.html"
   if [ "$preproc" != "" ]; then mv "$preproc_bak" "$1"; fi
@@ -318,12 +331,13 @@ if [ $modification -gt 0 ]; then
   echo -n "[fugitive] Generating $public_dir/archives.html... "
   cat "$templates_dir/archives.html" | \
     replace_includes | \
-    replace_foreach_article | \
+    replace_foreach "article" "$articles_sorted" | \
+    replace_foreach "commit" "$commits" | \
     replace_empty_article_info | \
-    replace_commit_info | \
+    replace_commit_info "-1" | \
     sed "/^\s*$/d" > "$public_dir/archives.html"
   echo "done."
-  
+
   echo -n "[fugitive] Using last published article as index page... "
   cp "$public_dir/`head -1 $articles_sorted`.html" "$public_dir/index.html"
   echo "done".
@@ -331,4 +345,5 @@ if [ $modification -gt 0 ]; then
 fi
 rm "$articles_sorted"
 rm "$articles_sorted_with_delete"
+rm "$commits"
 rm "$generated_files"
