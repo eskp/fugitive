@@ -238,12 +238,17 @@ replace_foreach () {
   fe="foreach:$1"
   cat > "$temp"
   cat "$temp" | \
+    sed -n "/<?fugitive\s\+$fe\s*?>/,/<?fugitive\s\+end$fe\s*?>/p" | \
+    tail -n +2 | head -n -1 > "$foreach_body"
+  if [ ! -s "$foreach_body" ]; then
+    cat "$temp"
+    rm "$foreach_body" "$tmpfile" "$temp"
+    return
+  fi
+  cat "$temp" | \
   sed "s/<?fugitive\s\+$fe\s*?>/<?fugitive foreach_body ?>\n\0/" | \
     sed "/<?fugitive\s\+$fe\s*?>/,/<?fugitive\s\+end$fe\s*?>/d" | \
     cat > "$tmpfile"
-  cat "$temp" | \
-    sed -n "/<?fugitive\s\+$fe\s*?>/,/<?fugitive\s\+end$fe\s*?>/p" | \
-    tail -n +2 | head -n -1 > "$foreach_body"
   for i in `cat "$2"`; do
     cat "$foreach_body" | replace_$1_info "$i"
   done > "$temp"
