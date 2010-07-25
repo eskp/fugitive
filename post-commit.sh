@@ -266,6 +266,7 @@ generate_article() {
   cat "$templates_dir/article.html" | \
     replace_file "article_content" "`get_article_content \"$art\"`" | \
     replace_includes | \
+    replace_str "page_title" "`get_article_title \"$art\"`" | \
     replace_commit_info "-1" | \
     replace_article_info "$art" | \
     sed "/^\s*$/d" > "$public_dir/$art.html"
@@ -339,6 +340,7 @@ if [ $modification -gt 0 ]; then
     replace_foreach "article" "$articles_sorted" | \
     replace_foreach "commit" "$commits" | \
     replace_empty_article_info | \
+    replace_str "page_title" "archives" | \
     replace_commit_info "-1" | \
     sed "/^\s*$/d" > "$public_dir/archives.html"
   echo "done."

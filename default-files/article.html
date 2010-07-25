@@ -1,27 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html>
-<html dir="ltr" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title><?fugitive-install name ?>'s blog: <?fugitive article_title ?></title>
-    <meta http-equiv="Content-type" content="application/xhtml+xml; charset=utf-8" />
-    <meta name="author" content="<?fugitive-install name ?>" />
-    <meta name="description" content="<?fugitive-install name ?>'s blog" />
-    <link rel="stylesheet" href="fugitive.css" type="text/css" media="screen" charset="utf-8" />
-    <link rel="stylesheet" href="print.css" type="text/css" media="print" charset="utf-8" />
-    <link rel="contents" href="archives.html" />
-    <?fugitive ifset:article_file ?>
-    <link rel="canonical" href="<?fugitive article_file ?>.html" />
-    <?fugitive endifset:article_file ?>
-    <?fugitive ifset:article_previous_file ?>
-    <link rel="prev" href="<?fugitive article_previous_file ?>.html" />
-    <?fugitive endifset:article_previous_file ?>
-    <?fugitive ifset:article_next_file ?>
-    <link rel="next" href="<?fugitive article_next_file ?>.html" />
-    <?fugitive endifset:article_next_file ?>
-  </head>
-  <body>
-    <div id="container">
-      <?fugitive include:nav-header.html ?>
+      <?fugitive include:top.html ?>
       <article>
         <header>
           <h1><?fugitive article_title ?></h1>
@@ -43,7 +20,4 @@
           <?fugitive article_content ?>
         </div>
       </article>
-      <?fugitive include:footer.html ?>
-    </div>
-  </body>
-</html>
+      <?fugitive include:bottom.html ?>
