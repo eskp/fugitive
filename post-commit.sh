@@ -311,8 +311,8 @@ done
 for f in $added_files; do
   if [ "$f" != "${f#$articles_dir}" ]; then
     art="${f#$articles_dir/}"
-    echo -n "[fugitive] Adding $art.html to git ignore list... "
-    echo "$art.html" >> .git/info/exclude
+    echo -n "[fugitive] Adding $public_dir/$art.html to git ignore list... "
+    echo "$public_dir/$art.html" >> .git/info/exclude
     echo "done."
     previous=`get_article_previous_file "$art"`
     next=`get_article_next_file "$art"`
