@@ -14,9 +14,9 @@ templates_dir=`git config --get fugitive.templates-dir`
 articles_dir=`git config --get fugitive.articles-dir`
 preproc=`git config --get fugitive.preproc`
 
-generated_files=`tempfile -p "fugitive"`
+generated_files=`mktemp --suffix "-fugitive"`
 
-articles_sorted=`tempfile -p "fugitive"`
+articles_sorted=`mktemp --suffix "-fugitive"`
 for f in $articles_dir/*; do
   ts=`git log --format="%at" -- "$f" | tail -1`
   if [ "$ts" != "" ]; then
@@ -24,7 +24,7 @@ for f in $articles_dir/*; do
   fi
 done | sort -nr | cut -d' ' -f2 > "$articles_sorted"
 
-articles_sorted_with_delete=`tempfile -p "fugitive"`
+articles_sorted_with_delete=`mktemp --suffix "-fugitive"`
 for f in $articles_dir/* $deleted_files; do
   ts=`git log --format="%at" -- "$f" | tail -1`
   if [ "$ts" != "" ]; then
@@ -32,7 +32,7 @@ for f in $articles_dir/* $deleted_files; do
   fi
 done | sort -nr | cut -d' ' -f2 > "$articles_sorted_with_delete"
 
-commits=`tempfile -p "fugitive"`
+commits=`mktemp --suffix "-fugitive"`
 git log --oneline | cut -d' ' -f1 > "$commits"
 
 get_article_info() {
@@ -68,7 +68,7 @@ get_article_title() {
   fi
 }
 get_article_content() {
-  tmp=`tempfile -p "fugitive"`
+  tmp=`mktemp --suffix "-fugitive"`
   tail -n+2 "$articles_dir/$1" > "$tmp"
   echo "$tmp"
 }
@@ -77,7 +77,7 @@ get_commit_info() {
   git show --quiet --format="$1" "$2"
 }
 get_commit_body() {
-  tmp=`tempfile -p "fugitive"`
+  tmp=`mktemp --suffix "-fugitive"`
   git show --quiet --format="%b" "$1" > "$tmp"
   if [ "`cat \"$tmp\" | sed \"/^$/d\" | wc -l`" != "0" ]; then
     echo "$tmp"
@@ -122,8 +122,8 @@ replace_file() {
 }
 
 replace_includes() {
-  buf=`tempfile -p "fugitive"`
-  buf2=`tempfile -p "fugitive"`
+  buf=`mktemp --suffix "-fugitive"`
+  buf2=`mktemp --suffix "-fugitive"`
   cat > "$buf"
   includes=`cat "$buf" | \
     sed "s/<?fugitive\s\+include:.\+\s*?>/\n\0\n/g" | \
@@ -235,9 +235,9 @@ replace_empty_article_info() {
 }
 
 replace_foreach () {
-  foreach_body=`tempfile -p "fugitive"`
-  tmpfile=`tempfile -p "fugitive"`
-  temp=`tempfile -p "fugitive"`
+  foreach_body=`mktemp --suffix "-fugitive"`
+  tmpfile=`mktemp --suffix "-fugitive"`
+  temp=`mktemp --suffix "-fugitive"`
   fe="foreach:$1"
   cat > "$temp"
   cat "$temp" | \
@@ -261,7 +261,7 @@ replace_foreach () {
 
 generate_article() {
   if [ "$preproc" != "" ]; then
-    preproc_bak=`tempfile -p "fugitive" -d "$articles_dir"`
+    preproc_bak=`mktemp --suffix "-fugitive" -d "$articles_dir"`
     mv "$1" "$preproc_bak"
     ($preproc) < "$preproc_bak" > "$1"
   fi
@@ -349,9 +349,9 @@ if [ $modification -gt 0 ]; then
     sed "/^\s*$/d" > "$public_dir/archives.html"
   echo "done."
   echo -n "[fugitive] Generating $public_dir/feed.xml... "
-  last_5_articles=`tempfile -p "fugitive"`
+  last_5_articles=`mktemp --suffix "-fugitive"`
   head -5 "$articles_sorted" > "$last_5_articles"
-  last_5_commits=`tempfile -p "fugitive"`
+  last_5_commits=`mktemp --suffix "-fugitive"`
   head -5 "$commits" > "$last_5_commits"
   cat "$templates_dir/feed.xml" | \
     replace_foreach "article" "$last_5_articles" | \
