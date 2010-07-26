@@ -36,14 +36,14 @@ fugitive_install() {
   git init >/dev/null
   echo "done."
   echo -n "Creating default directory tree... "
-  mkdir -p _drafts _articles _templates
+  mkdir -p _drafts _articles _templates _public
   echo "done."
-  echo -n "Adding default directory paths and settings to git config... "
-  git config --add --path fugitive.blog-url "http://localhost/fugitive/"
+  echo -n "Adding default settings to git config... "
+  git config --add fugitive.blog-url "http://localhost/fugitive/"
   git config --add --path fugitive.templates-dir "_templates"
   git config --add --path fugitive.articles-dir "_articles"
-  git config --add --path fugitive.public-dir "."
-  git config --add --path fugitive.preproc ""
+  git config --add --path fugitive.public-dir "_public"
+  git config --add fugitive.preproc ""
   echo "done."
   echo -n "Writing default template files... "
   fugitive_write_template > _templates/article.html <<EOF
