@@ -35,63 +35,74 @@ fugitive_install() {
   echo -n "Creating new git repository... "
   git init >/dev/null
   echo "done."
-  echo -n "Creating default directory tree... "
-  mkdir -p _drafts _articles _templates _public
-  echo "done."
   echo -n "Adding default settings to git config... "
-  git config --add fugitive.blog-url "http://localhost/fugitive/"
-  git config --add --path fugitive.templates-dir "_templates"
-  git config --add --path fugitive.articles-dir "_articles"
-  git config --add --path fugitive.public-dir "_public"
+  if [ "$2" = "remote" ]; then
+    git config --add receive.denyCurrentBranch "ignore"
+  fi
+  git config --add fugitive.blog-url ""
+  git config --add fugitive.templates-dir "_templates"
+  git config --add fugitive.articles-dir "_articles"
+  git config --add fugitive.public-dir "_public"
   git config --add fugitive.preproc ""
   echo "done."
-  echo -n "Writing default template files... "
-  fugitive_write_template > _templates/article.html <<EOF
+  fugitive_install_hooks
+  echo -n "Preventing git to track temporary and generated files... "
+    cat >> .git/info/exclude <<EOF
+*~
+_public/index.html
+_public/archives.html
+_public/feed.xml
+EOF
+  echo "done."
+  if [ "$2" = "local" ]; then
+    echo -n "Creating default directory tree... "
+    mkdir -p _drafts _articles _templates _public
+    echo "done."
+    echo -n "Writing default template files... "
+    fugitive_write_template > _templates/article.html <<EOF
 #INCLUDE:default-files/article.html#
 EOF
-  fugitive_write_template > _templates/archives.html <<EOF
+    fugitive_write_template > _templates/archives.html <<EOF
 #INCLUDE:default-files/archives.html#
 EOF
-  fugitive_write_template > _templates/top.html <<EOF
+    fugitive_write_template > _templates/top.html <<EOF
 #INCLUDE:default-files/top.html#
 EOF
-  fugitive_write_template > _templates/bottom.html <<EOF
+    fugitive_write_template > _templates/bottom.html <<EOF
 #INCLUDE:default-files/bottom.html#
 EOF
-  fugitive_write_template > _templates/feed.xml <<EOF
+    fugitive_write_template > _templates/feed.xml <<EOF
 #INCLUDE:default-files/feed.xml#
 EOF
-  echo "done."
-  echo -n "Writing default css files... "
-  (base64 -d | gunzip) > fugitive.css <<EOF
+    echo "done."
+    echo -n "Writing default css files... "
+    (base64 -d | gunzip) > _public/fugitive.css <<EOF
 #INCLUDE:default-files/fugitive.css#
 EOF
-  (base64 -d | gunzip) > print.css <<EOF
+    (base64 -d | gunzip) > _public/print.css <<EOF
 #INCLUDE:default-files/print.css#
 EOF
-  echo "done."
-  fugitive_install_hooks
-  echo -n "Importing files into git repository... "
-  git add _templates/* fugitive.css print.css >/dev/null
-  git commit -m "fugitive inital import" >/dev/null
-  echo "done."
-  echo -n "Preventing git to track temporary and generated files... "
-  echo "*~\nindex.html\narchives.html" > .git/info/exclude
-  echo "done."
-  echo "Writing dummy article (README) and adding it to the repos... "
-  (base64 -d | gunzip) > _articles/README <<EOF
+    echo "done."
+    echo -n "Importing files into git repository... "
+    git add _templates/* _public/*.css >/dev/null
+    git commit -m "fugitive inital import" >/dev/null
+    echo "done."
+    echo "Writing dummy article (README) and adding it to the repos... "
+    (base64 -d | gunzip) > _articles/README <<EOF
 #INCLUDE:README#
 EOF
-  git add _articles/README
-  git ci -m "fugitive fresh install" >/dev/null
-  echo "done."
+    git add _articles/README
+    git ci -m "fugitive: README" >/dev/null
+    echo "done."
+  fi
   cd - >/dev/null
   echo 'Installation almost complete, please visit your blog :-).'
 }
 
 case "$1" in
   "--help") fugitive_help >&2;;
-  "--install") fugitive_install "$2";;
+  "--install"|"--install-local") fugitive_install "$2" "local";;
+  "--install-remote") fugitive_install "$2" "remote";;
   "--install-hooks") fugitive_install_hooks "$2";;
   *) fugitive_usage >&2;;
 esac
