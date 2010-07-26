@@ -1,5 +1,12 @@
 #!/bin/sh
 
+added_files=`git log -1 --name-status --pretty="format:" | grep -E '^A' | \
+  cut -f2`
+modified_files=`git log -1 --name-status --pretty="format:" | grep -E '^M' | \
+  cut -f2`
+deleted_files=`git log -1 --name-status --pretty="format:" | grep -E '^D' | \
+  cut -f2`
+
 blog_url=`git config --get fugitive.blog-url`
 public_dir=`git config --get fugitive.public-dir`
 if [ ! -d "$public_dir" ]; then mkdir -p "$public_dir"; fi
@@ -7,12 +14,6 @@ templates_dir=`git config --get fugitive.templates-dir`
 articles_dir=`git config --get fugitive.articles-dir`
 preproc=`git config --get fugitive.preproc`
 
-added_files=`git log -1 --name-status --pretty="format:" | grep -E '^A' | \
-  cut -f2`
-modified_files=`git log -1 --name-status --pretty="format:" | grep -E '^M' | \
-  cut -f2`
-deleted_files=`git log -1 --name-status --pretty="format:" | grep -E '^D' | \
-  cut -f2`
 generated_files=`tempfile -p "fugitive"`
 
 articles_sorted=`tempfile -p "fugitive"`
