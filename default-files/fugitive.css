@@ -54,10 +54,7 @@ header q {
 article {
   display: block;
   text-align: left;
-  counter-reset: code;
-  counter-reset: figure;
-  counter-reset: section;
-  counter-reset: subsection;
+  counter-reset: code figure example section subsection;
 }
 article header {
   display: block;
@@ -110,11 +107,11 @@ article > div h3 {
   padding: 0;
   font-size: 1.2em;
   font-weight: bold;
+  counter-increment: subsection;
 }
 article > div h3:before {
   display: inline;
   content: counter(section) "." counter(subsection) ". ";
-  counter-increment: subsection;
 }
 article > div p:first-child:first-letter {
   font-size: 1.5em;
@@ -147,6 +144,11 @@ article > div p.note:before {
   font-weight: bold;
   font-variant: small-caps;
 }
+article > div p.example { counter-increment: example; }
+article > div p.example:before {
+  content: "example " counter(example) ":";
+  font-variant: small-caps;
+}
 article > div ul {
   margin: 1em 0;
   padding: 0 0 0 3em;
@@ -177,9 +179,7 @@ article > div blockquote {
   background: #f2f2f2;
   border-left: 0.1em solid #ccc;
 }
-article > div blockquote p {
-  margin: 0.5em 0;
-}
+article > div blockquote p { margin: 0.5em 0; }
 article > div code {
   color: #eee;
   background-color: #666;
@@ -202,33 +202,15 @@ article > div pre {
   background-color: #333;
   max-height: 420px;
 }
-article > div pre .comment {
-  color: #888;
-}
-article > div pre .comment-delimiter {
-  color: #888;
-}
-article > div pre .constant {
-  color: #d0d;
-}
-article > div pre .function-name {
-  color: #27d;
-}
-article > div pre .keyword {
-  color: #dd0;
-}
-article > div pre .preprocessor {
-  color: #9c3;
-}
-article > div pre .string {
-  color: #3af;
-}
-article > div pre .type {
-  color: #fa0;
-}
-article > div pre .variable-name {
-  color: #0b0;
-}
+article > div pre .comment { color: #888; }
+article > div pre .comment-delimiter { color: #888; }
+article > div pre .constant { color: #d0d; }
+article > div pre .function-name { color: #27d; }
+article > div pre .keyword { color: #dd0; }
+article > div pre .preprocessor { color: #9c3; }
+article > div pre .string { color: #3af; }
+article > div pre .type { color: #fa0; }
+article > div pre .variable-name { color: #0b0; }
 article > div figure {
   display: block;
   margin: 1em 0;
@@ -237,11 +219,18 @@ article > div figure {
 }
 article > div figure figcaption {
   display: block;
+  counter-increment: figure;
 }
+article > div figure.example figcation { counter-increment: example; }
 article > div figure figcaption:before {
   display: inline;
   content: "figure " counter(figure) ":";
-  counter-increment: figure;
+  font-variant: small-caps;
+}
+article > div figure.example figcaption:before {
+  display: inline;
+  content: "example " counter(example) ":";
+  font-variant: small-caps;
 }
 article > div .left {
   float: left;
@@ -251,9 +240,7 @@ article > div .right {
   float: right;
   margin: 0 0 0.5em 1em;
 }
-article > div .center {
-  text-align: center;
-}
+article > div .center { text-align: center; }
 article > div hr {
   margin: 1.5em auto;
   padding: 0;
@@ -280,4 +267,3 @@ footer p a {
   color: #666;
   text-decoration: none;
 }
-
