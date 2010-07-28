@@ -1,3 +1,24 @@
+      <nav>
+        <?fugitive ifset:article_file ?>
+        <ul class="nav">
+          <?fugitive ifset:article_previous_file ?>
+          <li>
+            <a href="<?fugitive article_previous_file ?>.html">« previous</a>
+          </li>
+          <?fugitive endifset:article_previous_file ?>
+          <?fugitive ifset:article_next_file ?>
+          <li>
+            <a href="<?fugitive article_next_file ?>.html">next »</a>
+          </li>
+          <?fugitive endifset:article_next_file ?>
+        </ul>
+        <?fugitive endifset:article_file ?>
+        <ul>
+          <li><a href="#topnav">top&uarr;</a></li>
+          <li><a href="index.html">home</a></li>
+          <li><a href="archives.html">archives</a></li>
+        </ul>
+      </nav>
       <footer>
         <p>
           <a href="http://www.gnu.org/copyleft/copyleft.html">copyleft</a>
