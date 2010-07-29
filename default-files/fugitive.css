@@ -125,7 +125,7 @@ article > div h4 {
   font-size: 1.1em;
   font-weight: bold;
 }
-article > div p:first-child:first-letter {
+article > div > p:first-child:first-letter {
   font-size: 1.5em;
   font-weight: bold;
 }
@@ -160,6 +160,20 @@ article > div p.example { counter-increment: example; }
 article > div p.example:before {
   content: "example " counter(example) ":";
   font-variant: small-caps;
+}
+article > div aside {
+  display: block;
+  padding: 0 0.5em;
+  margin: 0.5em 0 0.5em 0.5em;
+  width: 36%;
+  float: right;
+  border: 1px solid #ccc;
+  text-align: justify;
+  background-color: #f2f2f2;
+}
+article > div aside p {
+  font-size: 0.9em; 
+  margin: 0.5em 0;
 }
 article > div ul {
   margin: 1em 0;
