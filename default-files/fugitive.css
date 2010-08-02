@@ -24,13 +24,15 @@ nav {
   display: block;
   margin: 0;
   padding: 0.3em 1em;
-  border: 1px solid #ccc;
+  border-width: 1px;
+  border-color: #ccc;
+  border-style: solid none;
   background: #f2f2f2;
   color: #aaa;
   text-align: left;
 }
 #topnav {
-  border-top-style: none;
+  border-style: none solid solid solid;
   font-size: 1.3em;
 }
 nav ul { padding: 0; margin: 0; }
