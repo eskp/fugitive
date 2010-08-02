@@ -1,14 +1,24 @@
-fugitive README file
+fugitive: README
 
 <h2 id="info">Info</h2>
+
 <p>
   fugitive is a blog engine running on top of git using hooks to generate
   static html pages and thus having only git as dependency.
 </p>
+<p>
+  In its hooks, fugitive uses only standard UNIX® tools that are included in
+  the GNU core-utils package, plus sh as script interpreter. That's it.<br />
+  Moreover, evrything that can be done using git, is.<br />
+  No dependencies like rack, heroku, or whatever Ruby gems you can think of. No
+  configuration files. No metadata in your articles files. Hell, if you want to
+  you could even make a <a href="#templating">template</a> that use git log as
+  storage backend, which means <em>no files</em> either, just and only git.
+</p>
 
 <h2 id="install">Install</h2>
 
-<h3>Build</h3>
+<h3 id="build">Build</h3>
 <p>
   If you want to build fugitive from the source, clone the git repository:
   <br />
@@ -17,14 +27,24 @@ fugitive README file
   Then go in the newly created directory: <code>cd fugitive</code>, and
   run the build script: <code>./build.sh</code>.
   <br />
-  This will generate an executable file &quot;fugitive&quot;.
+  This will generate an executable file &quot;fugitive&quot; which you can use
+  to create your blog.
 </p>
-<h3>Create a blog</h3>
+<h3 id="create">Create a blog</h3>
 <p>
-  If you have the &quot;fugitive&quot; executable file and want to start a new
-  blog: Run <code>fugitive --install &lt;dir&gt;</code>.
+  There's two install mode for fugitive: local and remote. The local mode
+  should be used to install a repository where you edit your blog, and the
+  remote mode for a repository to which you're going to push to publish your
+  blog.<br />
+  The local mode can also be used to publish if you edit your file directly on
+  your server.
+</p>
+<p>
+  To create you blog run the commande:<br />
+  <code>fugitive --install-<em>mode</em> &lt;dir&gt;</code>,
+  where <em>mode</em> is either &quot;local&quot; or &quot;remote&quot;
   <br />
-  This will create the git repos with appropriate hooks and files in
+  This will create the git repos with appropriate hooks, config and files in
   &lt;dir&gt;.
   <br />
   If &lt;dir&gt; isn't specified then the current working directory is used.
@@ -34,24 +54,14 @@ fugitive README file
   parameter in your git configuration. See <a href="#config">configuration</a>
   for details.
 </p>
-<p class="note">
-  You need to use the same process to install any remote
-  repository where you'd like to push your blog.
-</p>
-<h3>Update</h3>
-<p>
-  Run <code>fugitive --install-hooks &lt;dir&gt;</code>.<br />
-  This will only (re)install fugitive hooks scripts.<br />
-  If &lt;dir&gt; isn't specified then the current working directory is used.
-</p>
 
 <h2 id="config">Configuration</h2>
 
 <p>
   All this settings are in the &quot;fugitive&quot; section of the git config.
-  You can change them with the command <code>git config
-  fugitive.<em>parameter</em> <em>value</em></code>, where <em>parameter</em>
-  is one of the following:
+  You can change them with the command <br />
+  <code>git config fugitive.<em>parameter</em> <em>value</em></code>,
+  where <em>parameter</em> is one of the following:
 </p>
 <dl>
   <dt>blog-url</dt>
@@ -60,24 +70,22 @@ fugitive README file
     it</strong> as soon as possible since it's required for the RSS feed (and
     used in the default template's footer).
   </dd>
-  <dt>public-dir</dt>
+  <dt>public-dir*</dt>
   <dd>
     This is the path to the directory that will contain the generated html
-    files. Defautlt value is &quot;.&quot;, the root of the git repository. You
-    could set it to &quot;blog&quot; for instance if you already have a static
-    website under your git repos.
+    files. Default value is &quot;_public&quot;. You could set it to
+    &quot;_public/blog&quot; for instance if you want to have have a website in
+    &quot;_public&quot; and your blog in &quot;/blog&quot;.
   </dd>
-  <dt>articles-dir</dt>
+  <dt>articles-dir*</dt>
   <dd>
     This is the path where fugitive will look for published articles. Default
-    value is &quot;_articles&quot;. This path is relative to the root of the
-    git repository, must be in it and must not start with &quot;.&quot;.
+    value is &quot;_articles&quot;.
   </dd>
-  <dt>templates-dire</dt>
+  <dt>templates-dire*</dt>
   <dd>
     This is the path where fugitive will look for templates files. Default
-    value is &quot;_templates&quot;. This path is relative to the root of the
-    git repository, must be in it and must not start with &quot;.&quot;.
+    value is &quot;_templates&quot;.
   </dd>
   <dt>preproc</dt>
   <dd>
@@ -87,23 +95,38 @@ fugitive README file
   </dd>
 </dl>
 <p class="note">
-  You must NOT put a trailing '/' at the end of any of the path.
+  * Those paths are relative to the root of the git repository, must be in it
+  and must not start with &quot;.&quot; neither have a '/' at the end. Example:
+  &quot;dir/subdir&quot; is valid but &quot;./dir/subdir&quot; and
+  &quot;dir/subdir/&quot; are not.
 </p>
 
 <h2 id="usage">Usage</h2>
 
-<h3>General use</h3>
+<h3 id="general-use">General use</h3>
 <p>
   Article you want to publish should be file without the .html extension in the
-  <em>articles-dir</em> directory (see CONFIGURATION).
+  <em>articles-dir</em> directory (see CONFIGURATION). The first line of the
+  file will be used as title and the rest of the file as the content of the
+  article.
 </p>
 <p>
-  The first line of the file will be used as title and the rest of the file as
-  the content.
+  By default there's a &quot;_drafts&quot; directory in which you can put
+  articles you are writing and you want to version control in your git
+  repository but you don't want to publish yet.
+</p>
+<p>
+  When you commit, <em>*TODO*: explain the process</em>.
+</p>
+<p>
+  When you push to a remote repository installed with fugitive, the same thing
+  will happen but instead of looking only at the last commit, the hooks will
+  analyse every change since the last push and then (re)generate html files
+  accordingly.
 </p>
 <p class="warning">
-  DO NOT CREATE AN ARTICLE FILE NAMED &quot;archives&quot;.<br />
-  DO NOT CREATE AN ARTICLE FILE NAMED &quot;index&quot;.
+  Do not create an article file named &quot;archives&quot;.<br />
+  Do not create an article file named &quot;index&quot;.
 </p>
-<h3>Template system</h3>
+<h3 id="templating">Template system</h3>
 <p><em>*TODO*</em></p>

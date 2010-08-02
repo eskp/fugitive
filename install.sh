@@ -15,10 +15,14 @@ fugitive_install_hooks() {
   (base64 -d | gunzip) > .git/hooks/post-commit <<EOF
 #INCLUDE:post-commit.sh#
 EOF
-  chmod +x .git/hooks/post-commit
   (base64 -d | gunzip) > .git/hooks/post-receive <<EOF
 #INCLUDE:post-receive.sh#
 EOF
+  (base64 -d | gunzip | \
+    tee -a .git/hooks/post-commit) >> .git/hooks/post-receive <<EOF
+#INCLUDE:html-gen.sh#
+EOF
+  chmod +x .git/hooks/post-commit
   chmod +x .git/hooks/post-receive
   echo "done."
 }
@@ -85,7 +89,7 @@ EOF
     echo "done."
     echo -n "Importing files into git repository... "
     git add _templates/* _public/*.css >/dev/null
-    git commit -m "fugitive inital import" >/dev/null
+    git commit -m "fugitive inital import" &>/dev/null
     echo "done."
     echo "Writing dummy article (README) and adding it to the repos... "
     (base64 -d | gunzip) > _articles/README <<EOF
@@ -95,12 +99,13 @@ EOF
     git ci -m "fugitive: README" >/dev/null
     echo "done."
   fi
+  echo "Installation complete, please set your blog url using"
+  echo '`git config fugitive.blog-url "<url>"`.'
   cd - >/dev/null
-  echo 'Installation almost complete, please visit your blog :-).'
 }
 
 case "$1" in
-  "--help") fugitive_help >&2;;
+  "--help"|"-h") fugitive_help >&2;;
   "--install"|"--install-local") fugitive_install "$2" "local";;
   "--install-remote") fugitive_install "$2" "remote";;
   "--install-hooks") fugitive_install_hooks "$2";;

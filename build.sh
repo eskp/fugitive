@@ -12,7 +12,7 @@ include_file() {
 
 cp install.sh tmp1
 i=1
-for f in README post-commit.sh post-receive.sh default-files/*; do
+for f in README post-commit.sh post-receive.sh html-gen.sh default-files/*; do
   j=$((1 - i))
   include_file tmp$i "$f" > tmp$j
   i=$j
