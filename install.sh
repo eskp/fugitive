@@ -89,14 +89,14 @@ EOF
     echo "done."
     echo -n "Importing files into git repository... "
     git add _templates/* _public/*.css >/dev/null
-    git commit -m "fugitive inital import" &>/dev/null
+    git commit -m "fugitive inital import" >/dev/null 2>&1
     echo "done."
     echo "Writing dummy article (README) and adding it to the repos... "
     (base64 -d | gunzip) > _articles/README <<EOF
 #INCLUDE:README#
 EOF
     git add _articles/README
-    git ci -m "fugitive: README" >/dev/null
+    git commit -m "fugitive: README" >/dev/null
     echo "done."
   fi
   echo "Installation complete, please set your blog url using"
@@ -105,9 +105,9 @@ EOF
 }
 
 case "$1" in
-  "--help"|"-h") fugitive_help >&2;;
+  "--help"|"-h") fugitive_help >&2;; # TODO
   "--install"|"--install-local") fugitive_install "$2" "local";;
   "--install-remote") fugitive_install "$2" "remote";;
   "--install-hooks") fugitive_install_hooks "$2";;
-  *) fugitive_usage >&2;;
+  *) fugitive_usage >&2;; # TODO
 esac
