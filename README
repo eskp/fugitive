@@ -116,7 +116,27 @@ fugitive: README
   repository but you don't want to publish yet.
 </p>
 <p>
-  When you commit, <em>*TODO*: explain the process</em>.
+  When you commit change to a fugitive git repository, the post-commit hooks
+  looks in the <em>articles-dir</em> directory
+  (see <a href="#config">configuration</a>) for newly added articles, modified
+  articles and deleted ones. Then it do the following things:
+</p>
+<ul>
+  <li>it generates static html files for newly added articles,</li>
+  <li>it regenerates static html files for modified artciles,</li>
+  <li>it deletes static html files for deleted articles,</li>
+  <li>it regenerates static html files for articles that are just
+  before and after newly added and deleted articles (this to maintain the
+  &quot;previous&quot; and &quot;next&quot; links alive),</li>
+  <li>it regenerates the &quot;archives.html&quot; and &quot;feed.xml&quot;
+  files,</li>
+  <li>and finally it copies the static html file of the last article to
+  &quot;index.html&quot;.</li>
+</ul>
+<p class="note">
+  If a change happen in the <em>templates-dir</em> directory
+  (see <a href="#config">configuration</a>), then static html files for
+  everything is regenerated to take the change into account.
 </p>
 <p>
   When you push to a remote repository installed with fugitive, the same thing
