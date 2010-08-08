@@ -116,7 +116,7 @@ fugitive: README
   repository but you don't want to publish yet.
 </p>
 <p>
-  When you commit change to a fugitive git repository, the post-commit hooks
+  When you commit change to a fugitive git repository, the post-commit hook
   looks in the <em>articles-dir</em> directory
   (see <a href="#config">configuration</a>) for newly added articles, modified
   articles and deleted ones. Then it do the following things:
