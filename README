@@ -9,7 +9,7 @@ fugitive: README
 <p>
   In its hooks, fugitive uses only standard UNIX® tools that are included in
   the GNU core-utils package, plus sh as script interpreter. That's it.<br />
-  Moreover, evrything that can be done using git, is.<br />
+  Moreover, everything that can be done using git, is.<br />
   No dependencies like rack, heroku, or whatever Ruby gems you can think of. No
   configuration files. No metadata in your articles files. Hell, if you want to
   you could even make a <a href="#templating">template</a> that use git log as
@@ -106,9 +106,9 @@ fugitive: README
 <h3 id="general-use">General use</h3>
 <p>
   Article you want to publish should be file without the .html extension in the
-  <em>articles-dir</em> directory (see CONFIGURATION). The first line of the
-  file will be used as title and the rest of the file as the content of the
-  article.
+  <em>articles-dir</em> directory (see <a href="#config">configuration</a>).
+  The first line of the file will be used as title and the rest of the file as
+  the content of the article.
 </p>
 <p>
   By default there's a &quot;_drafts&quot; directory in which you can put
