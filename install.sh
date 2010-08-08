@@ -108,6 +108,6 @@ case "$1" in
   "--help"|"-h") fugitive_help >&2;; # TODO
   "--install"|"--install-local") fugitive_install "$2" "local";;
   "--install-remote") fugitive_install "$2" "remote";;
-  "--install-hooks") fugitive_install_hooks "$2";;
+  "--install-hooks") fugitive_install_hooks;;
   *) fugitive_usage >&2;; # TODO
 esac
