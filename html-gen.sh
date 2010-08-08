@@ -9,6 +9,22 @@ if [ ! -d "$public_dir" ]; then mkdir -p "$public_dir"; fi
 articles_dir=`git config --get fugitive.articles-dir`
 preproc=`git config --get fugitive.preproc`
 
+tpl_change=`echo "$added_files" "$modified_files" "$deleted_files" | \
+  grep -c "$templates_dir/"`
+if [ "$tpl_change" -gt 0 ]; then
+  added_files=
+  modified_files=`git log --name-status --pretty="format:" | \
+    grep -E '^A' | cut -f2 | sort | uniq`
+  deleted_files=
+  tmpart=`mktemp --suffix "-fugitive"`
+  tmpmod=`mktemp --suffix "-fugitive"`
+  ls "$articles_dir"/* > "$tmpart"
+  echo "$modified_files" | tr " " "\n" > "$tmpmod"
+  modified_files=`comm -12  --nocheck-order "$tmpmod" "$tmpart"`
+  rm "$tmpart" "$tmpmod"
+  echo "[fugitive] Templates changed, regenerating everything..."
+fi
+
 generated_files=`mktemp --suffix "-fugitive"`
 
 articles_sorted=`mktemp --suffix "-fugitive"`
@@ -151,7 +167,7 @@ replace_commit_info() {
   commit_subject=`get_commit_info "%s" "$1"`
   commit_slug=`get_commit_info "%f" "$1"`
   commit_body=`get_commit_body "$1"`
-  
+
   replace_str "commit_Hash" "$commit_Hash" | \
     replace_str "commit_hash" "$commit_hash" | \
     replace_str "commit_author" "$commit_author" | \
