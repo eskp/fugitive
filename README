@@ -42,7 +42,7 @@ fugitive: README
 <p>
   To create you blog run the commande:<br />
   <code>fugitive --install-<em>mode</em> &lt;dir&gt;</code>,
-  where <em>mode</em> is either &quot;local&quot; or &quot;remote&quot;
+  where <em>mode</em> is either &quot;local&quot; or &quot;remote&quot;.
   <br />
   This will create the git repos with appropriate hooks, config and files in
   &lt;dir&gt;.
@@ -119,7 +119,7 @@ fugitive: README
   When you commit change to a fugitive git repository, the post-commit hook
   looks in the <em>articles-dir</em> directory
   (see <a href="#config">configuration</a>) for newly added articles, modified
-  articles and deleted ones. Then it do the following things:
+  articles and deleted ones. Then it does the following things:
 </p>
 <ul>
   <li>it generates static html files for newly added articles,</li>
@@ -136,12 +136,15 @@ fugitive: README
 <p class="note">
   If a change happen in the <em>templates-dir</em> directory
   (see <a href="#config">configuration</a>), then static html files for
-  everything is regenerated to take the change into account.
+  everything is regenerated to make the change effective.
 </p>
 <p>
+  All generated files are created in the <em>public-dir</em> directory
+  (see <a href="#config">configuration</a>).
+<p>
   When you push to a remote repository installed with fugitive, the same thing
-  will happen but instead of looking only at the last commit, the hooks will
-  analyse every change since the last push and then (re)generate html files
+  will happen but instead of looking only at the last commit, the hook will
+  analyse every changes since the last push and then (re)generate html files
   accordingly.
 </p>
 <p class="warning">
