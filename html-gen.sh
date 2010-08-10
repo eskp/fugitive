@@ -35,6 +35,11 @@ for f in "$articles_dir"/*; do
   fi
 done | sort -nr | cut -d' ' -f2 > "$articles_sorted"
 
+if [ "`head -1 $articles_sorted`" = "" ]; then
+  echo "[fugitive] Need at least one article, aborting." >&2
+  exit 1
+fi
+
 articles_sorted_with_delete=`mktemp --suffix "-fugitive"`
 for f in "$articles_dir"/* $deleted_files; do
   ts=`git log --format="%at" -- "$f" | tail -1`
