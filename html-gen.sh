@@ -36,8 +36,7 @@ for f in "$articles_dir"/*; do
 done | sort -nr | cut -d' ' -f2 > "$articles_sorted"
 
 if [ "`head -1 $articles_sorted`" = "" ]; then
-  echo "[fugitive] Need at least one article, aborting." >&2
-  exit 1
+  echo "[fugitive] WARNING: there's no article, errors may occur." >&2
 fi
 
 articles_sorted_with_delete=`mktemp --suffix "-fugitive"`
