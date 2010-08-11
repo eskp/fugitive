@@ -369,8 +369,10 @@ if [ $modification -gt 0 ]; then
   last_5_commits=`mktemp --suffix "-fugitive"`
   head -5 "$commits" > "$last_5_commits"
   cat "$templates_dir/feed.xml" | \
+    replace_includes | \
     replace_foreach "article" "$last_5_articles" | \
     replace_foreach "commit" "$last_5_commits" | \
+    replace_str "page_title" "feed" | \
     replace_str "blog_url" "$blog_url" | \
     replace_commit_info "-1" | \
     sed "/^\s*$/d" > "$public_dir/feed.xml"

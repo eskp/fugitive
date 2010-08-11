@@ -152,4 +152,206 @@ fugitive: README
   Do not create an article file named &quot;index&quot;.
 </p>
 <h3 id="templating">Template system</h3>
+<p>
+  The better explaination about the templates system is to see what the default
+  templates looks like. But since they do not use all the offered
+  possibilities, here are some more explainations...
+</p>
+<p>
+  The fugitive template system uses xml preprocessor
+  syntax: <code>&lt;?fugitive <em>var</em> ?&gt;</code> is rendered as the
+  value of <em>var</em>.
+</p>
+<p>
+  In addition to that, there are a conditional and a foreach loop constructs,
+  plus an include directive.
+</p>
+<p>
+  The syntax of the include directive is <code>&lt;?fugitive
+  include:<em>file</em> ?&gt;</code> where <em>file</em> is relative to
+  the <em>templates-dir</em> directory
+  (see <a href="#config">configuration</a>). The includes are processed before
+  anything else.
+</p>
+<p>
+  The foreach loop construct is specific to the &quot;archives.html&quot; and
+  &quot;feed.xml&quot; templates and will therefore be described at the same
+  time. Where available, the loops are processed right after the includes.
+</p>
+<p>
+  The syntax of the conditional construct is as follow:
+</p>
+<pre>&lt;<span class="keyword">?fugitive</span> ifset:<em>var</em> ?&gt;
+  Template code which is ignored if var value is empty, and
+  which typically includes &lt;<span class="function-name">code</span>&gt;&lt;<span class="keyword">?fugitive</span> <em>var</em> ?&gt;&lt;/<span class="function-name">code</span>&gt;.
+&lt;<span class="keyword">?fugitive</span> endifset:<em>var</em> ?&gt;</pre>
+<p class="note">
+  Not every variables can be used in the conditional construct, it is indicated
+  in the description od those which can't.
+</p>
+<p>The following variables are available everywhere:</p>
+<dl>
+  <dt>page_title</dt>
+  <dd>
+    Its value is &quot;archives&quot; in the archives.html template,
+    &quot;feed&quot; in the feed.xml template, or the article title in the
+    article.html template.
+  </dd>
+  <dt>blog_url</dt>
+  <dd>
+    the <em>blog-url</em> value in the &quot;fugitive&quot; section of the git
+    configuration (see <a href="#config">configuration</a>).
+  </dd>
+  <dt>commit_Hash</dt>
+  <dd>
+    Its value is the hash corresponding to the last commit that provoked the
+    (re)generation of the file.
+  </dd>
+  <dt>commit_hash</dt>
+  <dd>
+    Its value is the short hash (the seven first digit of the hash)
+    corresponding to the last commit that provoked the (re)generation of the
+    file.
+  </dd>
+  <dt>commit_author</dt>
+  <dd>
+    Its value is the name of the author of the last commit that provoked the
+    (re)generation of the file.
+  </dd>
+  <dt>commit_author_email</dt>
+  <dd>
+    Its value is the email of the author of the last commit that provoked the
+    (re)generation of the file (with '@' replaced by &quot;[at]&quot; and '.'
+    replaced by &quot;(dot)&quot;).
+  </dd>
+  <dt>commit_datetime</dt>
+  <dd>
+    Its value is the date and time of the last commit that provoked the
+    (re)generation of the file.
+  </dd>
+  <dt>commit_date</dt>
+  <dd>
+    Its value is the date of the last commit that provoked the (re)generation
+    of the file.
+  </dd>
+  <dt>commit_time</dt>
+  <dd>
+    Its value is the time of the last commit that provoked the (re)generation
+    of the file.
+  </dd>
+  <dt>commit_timestamp</dt>
+  <dd>
+    Its value is the unix timestamp of the last commit that provoked the
+    (re)generation of the file.
+  </dd>
+  <dt>commit_subject</dt>
+  <dd>
+    Its value is the subject (first line of the commit message) of the last
+    commit that provoked the (re)generation of the file.
+  </dd>
+  <dt>commit_body</dt>
+  <dd>
+    Its value is the body (the rest of the commit message) of the last commit
+    that provoked the (re)generation of the file. <strong>This variable can't
+    be used in the conditional construct.</strong>
+  </dd>
+  <dt>commit_slug</dt>
+  <dd>
+    Its value is the subject of the last commit that provoked the
+    (re)generation of the file but formatted to be file name friendly.
+  </dd>
+</dl>
+<h4>Variables specific to the article.html templates:</h4>
+<dl>
+  <dt>article_title</dt>
+  <dd>
+    Its value is the title of the article (the first line of the file).
+  </dd>
+  <dt>article_content</dt>
+  <dd>
+    Its value is the content of the article (the rest of the
+    file). <strong>This variable can't be used in the conditional
+    construct.</strong>
+  </dd>
+  <dt>article_file</dt>
+  <dd>
+    Its value is the file name of the article (without the .html extension).
+  </dd>
+  <dt>article_cdatetime</dt>
+  <dd>
+    Its value is the date and time of the publication of the article (the date
+    of the commit which added the article to the repository in
+    the <em>articles-dir</em> directory
+    (see <a href="#config">configuration</a>)).
+  </dd>
+  <dt>article_cdate</dt>
+  <dd>
+    Its value is the date of the publication of the article.
+  </dd>
+  <dt>article_ctime</dt>
+  <dd>
+    Its value is the time of the publication of the article.
+  </dd>
+  <dt>article_ctimestamp</dt>
+  <dd>
+    Its value is the timestamp of the publication of the article.
+  </dd>
+  <dt>article_mdatetime</dt>
+  <dd>
+    Its value is the date and time of the last modification of the article
+    (the date of the last commit which changed the article file).
+  </dd>
+  <dt>article_mdate</dt>
+  <dd>
+    Its value is the date of the last modification of the article.
+  </dd>
+  <dt>article_mtime</dt>
+  <dd>
+    Its value is the time of the last modification of the article.
+  </dd>
+  <dt>article_mtimestamp</dt>
+  <dd>
+    Its value is the timestamp of the last modification of the article.
+  </dd>
+  <dt>article_cauthor</dt>
+  <dd>
+    Its value is the author of the commit which added the article to the
+    repository.
+  </dd>
+  <dt>article_cauthor_email</dt>
+  <dd>
+    Its value is the email of the author of the commit which added the article
+    to the repository (with '@' replaced by &quot;[at]&quot; and '.' replaced
+    by &quot;(dot)&quot;).
+  </dd>
+  <dt>article_mauthor</dt>
+  <dd>
+    Its value is the author of the last commit which changed the article file.
+  </dd>
+  <dt>article_mauthor_email</dt>
+  <dd>
+    Its value is the email of the author of the last commit which changed the
+    article file (with '@' replaced by &quot;[at]&quot; and '.' replaced by
+    &quot;(dot)&quot;).
+  </dd>
+  <dt>article_previous_file</dt>
+  <dd>
+    Its value is the file name (without .html extension) of the previous
+    article ordered by publication date.
+  </dd>
+  <dt>article_previous_title</dt>
+  <dd>
+    Its value is the title of the previous article ordered by publication date.
+  </dd>
+  <dt>article_next_file</dt>
+  <dd>
+    Its value is the file name (without .html extension) of the next article
+    ordered by publication date.
+  </dd>
+  <dt>article_next_title</dt>
+  <dd>
+    Its value is the title of the next article ordered by publication date.
+  </dd>
+</dl>
+<h4>foreach loops in archives.html and feed.xml:</h4>
 <p><em>*TODO*</em></p>
