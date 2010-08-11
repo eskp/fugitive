@@ -160,11 +160,13 @@ fugitive: README
 <p>
   The fugitive template system uses xml preprocessor
   syntax: <code>&lt;?fugitive <em>var</em> ?&gt;</code> is rendered as the
-  value of <em>var</em>.
+  value of <em>var</em>. This choice has been made because with this syntax
+  templates are still valid xml (and html) document, and it is semantically
+  more accurate than xml comments (<code>&lt;!-- <em>var</em> --&gt;</code>).
 </p>
 <p>
-  In addition to that, there are a conditional and a foreach loop constructs,
-  plus an include directive.
+  In addition to variable rendering, there are a conditional and a foreach loop
+  constructs, plus an include directive.
 </p>
 <p>
   The syntax of the include directive is <code>&lt;?fugitive
