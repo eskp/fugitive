@@ -184,7 +184,7 @@ fugitive: README
   The syntax of the conditional construct is as follow:
 </p>
 <pre>&lt;<span class="keyword">?fugitive</span> ifset:<em>var</em> ?&gt;
-  Template code which is ignored if var value is empty, and
+  Template code which is ignored if <em>var</em> value is empty, and
   which typically includes &lt;<span class="function-name">code</span>&gt;&lt;<span class="keyword">?fugitive</span> <em>var</em> ?&gt;&lt;/<span class="function-name">code</span>&gt;.
 &lt;<span class="keyword">?fugitive</span> endifset:<em>var</em> ?&gt;</pre>
 <p class="note">
