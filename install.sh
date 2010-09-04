@@ -112,10 +112,28 @@ EOF
   cd - >/dev/null
 }
 
+fugitive_usage() {
+  echo "This is fugitive installation script."
+  echo "To install a local (where you commit) repository of your blog run:"
+  echo "      fugitive --install-local <dir>"
+  echo -n "where <dir> is where you want the installation to take place, "
+  echo "it's in the working directory by defaults."
+  echo "To install a remote (where you push) repository of your blog run:"
+  echo "      fugitive --install-remote <dir>"
+  echo -n "where <dir> is where you want the installation to take place, "
+  echo "it's in the working directory by defaults."
+}
+
+fugitive_help() {
+  echo -n "fugitive is a blog engine running on top of git using hooks to "
+  echo "generate static html pages and thus having only git as dependency."
+  fugitive_usage
+}
+
 case "$1" in
-  "--help"|"-h") fugitive_help >&2;; # TODO
+  "--help"|"-h") fugitive_help >&2;;
   "--install"|"--install-local") fugitive_install "$2" "local";;
   "--install-remote") fugitive_install "$2" "remote";;
   "--install-hooks") fugitive_install_hooks;;
-  *) fugitive_usage >&2;; # TODO
+  *) fugitive_usage >&2;;
 esac
