@@ -100,10 +100,10 @@ EOF
     git commit --no-verify -m "fugitive inital import" >/dev/null 2>&1
     echo "done."
     echo "Writing dummy article (README) and adding it to the repos... "
-    (base64 -d | gunzip) > _articles/README <<EOF
+    (base64 -d | gunzip) > _articles/fugitive-readme <<EOF
 #INCLUDE:README#
 EOF
-    git add _articles/README
+    git add _articles/fugitive-readme
     git commit --no-verify -m "fugitive: README" >/dev/null
     echo "done."
   fi
