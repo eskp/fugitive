@@ -23,10 +23,10 @@ modified_files=`git log $range --name-status --pretty="format:" | \
 deleted_files=`git log $range --name-status --pretty="format:" | \
   grep -E '^D' | cut -f2 | sort | uniq`
 
-tmpart=`mktemp --suffix "-fugitive"`
-tmpadd=`mktemp --suffix "-fugitive"`
-tmpmod=`mktemp --suffix "-fugitive"`
-tmpdel=`mktemp --suffix "-fugitive"`
+tmpart=`mktemp`
+tmpadd=`mktemp`
+tmpmod=`mktemp`
+tmpdel=`mktemp`
 ls "$articles_dir"/* > "$tmpart"
 echo "$added_files" | tr " " "\n" > "$tmpadd"
 echo "$modified_files" | tr " " "\n" > "$tmpmod"

@@ -2,7 +2,7 @@
 
 articles_dir=`git config --get fugitive.articles-dir`
 
-article_exists=`mktemp --suffix "-fugitive"`
+article_exists=`mktemp`
 for f in "$articles_dir"/*; do
   ts=`git log --format="%at" -- "$f" | tail -1`
   if [ "$ts" != "" ]; then
