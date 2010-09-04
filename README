@@ -128,7 +128,7 @@ fugitive: README
   <li>it regenerates static html files for articles that are just
   before and after newly added and deleted articles (this to maintain the
   &quot;previous&quot; and &quot;next&quot; links alive),</li>
-  <li>it regenerates the &quot;archives.html&quot; and &quot;feed.xml&quot;
+  <li>it regenerates the archives.html and feed.xml
   files,</li>
   <li>and finally it copies the static html file of the last article to
   &quot;index.html&quot;.</li>
@@ -176,15 +176,15 @@ fugitive: README
   anything else.
 </p>
 <p>
-  The foreach loop construct is specific to the &quot;archives.html&quot; and
-  &quot;feed.xml&quot; templates and will therefore be described at the same
+  The foreach loop construct is specific to the archives.html and
+  feed.xml templates and will therefore be described at the same
   time. Where available, the loops are processed right after the includes.
 </p>
 <p>
   The syntax of the conditional construct is as follow:
 </p>
 <pre>&lt;<span class="keyword">?fugitive</span> ifset:<em>var</em> ?&gt;
-  Template code which is ignored if var value is empty, and
+  Template code which is ignored if <em>var</em> value is empty, and
   which typically includes &lt;<span class="function-name">code</span>&gt;&lt;<span class="keyword">?fugitive</span> <em>var</em> ?&gt;&lt;/<span class="function-name">code</span>&gt;.
 &lt;<span class="keyword">?fugitive</span> endifset:<em>var</em> ?&gt;</pre>
 <p class="note">
@@ -356,4 +356,21 @@ fugitive: README
   </dd>
 </dl>
 <h4>foreach loops in archives.html and feed.xml:</h4>
-<p><em>*TODO*</em></p>
+<p>
+  Two foreach loops are available: <code>foreach:article</code>
+  and <code>foreach:commit</code>. The syntax is as follow:
+</p>
+<pre>&lt;<span class="keyword">?fugitive</span> foreach:article ?&gt;
+  Template code that will be repeated for each article and
+  where the values of &lt;<span class="function-name">code</span>&gt;article_*&lt;/<span class="function-name">code</span>&gt; variables are
+  set in accordance with the article each time.
+&lt;<span class="keyword">?fugitive</span> endforeach:article ?&gt;</pre>
+<pre>&lt;<span class="keyword">?fugitive</span> foreach:commit ?&gt;
+  Template code that will be repeated for each commit and
+  where the values of &lt;<span class="function-name">code</span>&gt;commit_*&lt;/<span class="function-name">code</span>&gt; variables are
+  set in accordance with the commit each time.
+&lt;<span class="keyword">?fugitive</span> endforeach:commit ?&gt;</pre>
+<p>
+  The only difference between the archives.html and feed.xml templates is that
+  in feed.xml these contsructs only loop on the five last articles and commits.
+</p>
