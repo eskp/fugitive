@@ -40,7 +40,7 @@ fugitive: README
   your server.
 </p>
 <p>
-  To create you blog run the commande:<br />
+  To create your blog run the command:<br />
   <code>fugitive --install-<em>mode</em> &lt;dir&gt;</code>,
   where <em>mode</em> is either &quot;local&quot; or &quot;remote&quot;.
   <br />
