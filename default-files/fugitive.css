@@ -19,7 +19,7 @@ html, body {
   color: #333;
   text-decoration: none;
 }
-#container a:hover { color: #9c3; }
+#container a:hover, #container a:active { color: #9c3; }
 nav {
   display: block;
   margin: 0;
@@ -44,7 +44,7 @@ nav ul li a {
   color: #aaa;
   text-decoration: none;
 }
-#container nav ul li a:hover { color: #888; }
+#container nav ul li a:hover, #container nav ul li a:active { color: #888; }
 header {
   display: block;
   margin: 1em 0;
@@ -99,7 +99,7 @@ article > div a {
   color: #08f;
   text-decoration: underline;
 }
-article > div a:hover { text-decoration: underline;  }
+article > div a:hover, article > div a:active { text-decoration: underline; }
 article > div a:visited { color: #048; }
 article > div h2 {
   margin: 1em 0 0.5em 0;
@@ -295,4 +295,4 @@ footer p a {
   color: #666;
   text-decoration: none;
 }
-#container footer p a:hover { color: #333; }
+#container footer p a:hover, #container footer p a:active { color: #333; }
