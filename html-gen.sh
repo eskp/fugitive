@@ -105,29 +105,29 @@ sanit_mail() {
 
 replace_condition() {
   if [ "$2" = "" ]; then
-    sed "s/<?fugitive\s\+\(end\)\?ifset:$1\s*?>/\n\0\n/g" | \
-      sed "/<?fugitive\s\+ifset:$1\s*?>/,/<?fugitive\s\+endifset:$1\s*?>/bdel
+    sed "s/<?fugitive[[:space:]]\+\(end\)\?ifset:$1[[:space:]]*?>/\n\0\n/g" | \
+      sed "/<?fugitive[[:space:]]\+ifset:$1[[:space:]]*?>/,/<?fugitive[[:space:]]\+endifset:$1[[:space:]]*?>/bdel
         b
         :del
-        s/<?fugitive\s\+endifset:$1\s*?>.*//
-        /<?fugitive\s\+endifset:$1\s*?>/b
+        s/<?fugitive[[:space:]]\+endifset:$1[[:space:]]*?>.*//
+        /<?fugitive[[:space:]]\+endifset:$1[[:space:]]*?>/b
         d"
   else
-    sed "s/<?fugitive\s\+\(end\)\?ifset:$1\s*?>//"
+    sed "s/<?fugitive[[:space:]]\+\(end\)\?ifset:$1[[:space:]]*?>//"
   fi
 }
 
 replace_str() {
   esc=`echo $2 | sed 's/\//\\\\\//g'`
   replace_condition "$1" "$2" | \
-    sed "s/<?fugitive\s\+$1\s*?>/$esc/g"
+    sed "s/<?fugitive[[:space:]]\+$1[[:space:]]*?>/$esc/g"
 }
 
 # REMEMBER: 2nd arg should be a tempfile!
 replace_file() {
   if [ -f "$2" ]; then
-    sed "s/<?fugitive\s\+$1\s*?>/\n\0\n/g" | \
-      sed "/<?fugitive\s\+$1\s*?>/ {
+    sed "s/<?fugitive[[:space:]]\+$1[[:space:]]*?>/\n\0\n/g" | \
+      sed "/<?fugitive[[:space:]]\+$1[[:space:]]*?>/ {
         r $2
         d }"
     rm "$2"
@@ -141,14 +141,14 @@ replace_includes() {
   buf2=`mktemp`
   cat > "$buf"
   includes=`cat "$buf" | \
-    sed "s/<?fugitive\s\+include:.\+\s*?>/\n\0\n/g" | \
-    grep -E "<\?fugitive\s+include:.+\s*\?>" | \
-    sed "s/^<?fugitive\s\+include://;s/\s*?>$//"`
+    sed "s/<?fugitive[[:space:]]\+include:.\+[[:space:]]*?>/\n\0\n/g" | \
+    grep -E "<\?fugitive[[:space:]]+include:.+[[:space:]]*\?>" | \
+    sed "s/^<?fugitive[[:space:]]\+include://;s/[[:space:]]*?>$//"`
   for i in $includes; do
     esc=`echo -n $i | sed 's/\//\\\\\//g'`
     inc="$templates_dir/$i"
     cat "$buf" | \
-      sed "/<?fugitive\s\+include:$esc\s*?>/ {
+      sed "/<?fugitive[[:space:]]\+include:$esc[[:space:]]*?>/ {
         r $inc
         d }" > "$buf2"
     tmpbuf="$buf"
@@ -256,7 +256,7 @@ replace_foreach () {
   fe="foreach:$1"
   cat > "$temp"
   cat "$temp" | \
-    sed -n "/<?fugitive\s\+$fe\s*?>/,/<?fugitive\s\+end$fe\s*?>/p" | \
+    sed -n "/<?fugitive[[:space:]]\+$fe[[:space:]]*?>/,/<?fugitive[[:space:]]\+end$fe[[:space:]]*?>/p" | \
     tail -n +2 | head -n -1 > "$foreach_body"
   if [ ! -s "$foreach_body" ]; then
     cat "$temp"
@@ -264,8 +264,8 @@ replace_foreach () {
     return
   fi
   cat "$temp" | \
-  sed "s/<?fugitive\s\+$fe\s*?>/<?fugitive foreach_body ?>\n\0/" | \
-    sed "/<?fugitive\s\+$fe\s*?>/,/<?fugitive\s\+end$fe\s*?>/d" | \
+  sed "s/<?fugitive[[:space:]]\+$fe[[:space:]]*?>/<?fugitive foreach_body ?>\n\0/" | \
+    sed "/<?fugitive[[:space:]]\+$fe[[:space:]]*?>/,/<?fugitive[[:space:]]\+end$fe[[:space:]]*?>/d" | \
     cat > "$tmpfile"
   for i in `cat "$2"`; do
     cat "$foreach_body" | replace_$1_info "$i"
@@ -287,7 +287,7 @@ generate_article() {
     replace_str "blog_url" "$blog_url" | \
     replace_commit_info "-1" | \
     replace_article_info "$art" | \
-    sed "/^\s*$/d" > "$public_dir/$art.html"
+    sed "/^[[:space:]]*$/d" > "$public_dir/$art.html"
   if [ "$preproc" != "" ]; then mv "$preproc_bak" "$1"; fi
 }
 
@@ -361,7 +361,7 @@ if [ $modification -gt 0 ]; then
     replace_str "page_title" "archives" | \
     replace_str "blog_url" "$blog_url" | \
     replace_commit_info "-1" | \
-    sed "/^\s*$/d" > "$public_dir/archives.html"
+    sed "/^[[:space:]]*$/d" > "$public_dir/archives.html"
   echo "done."
   echo -n "[fugitive] Generating $public_dir/feed.xml... "
   last_5_articles=`mktemp`
@@ -375,7 +375,7 @@ if [ $modification -gt 0 ]; then
     replace_str "page_title" "feed" | \
     replace_str "blog_url" "$blog_url" | \
     replace_commit_info "-1" | \
-    sed "/^\s*$/d" > "$public_dir/feed.xml"
+    sed "/^[[:space:]]*$/d" > "$public_dir/feed.xml"
   echo "done."
   rm "$last_5_articles" "$last_5_commits"
   echo -n "[fugitive] Using last published article as index page... "

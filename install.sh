@@ -1,7 +1,7 @@
 #!/bin/sh
 
 replace_string() {
-  sed "s/<?fugitive-install\s\+$1\s*?>/$2/"
+  sed "s/<?fugitive-install[[:space:]]\+$1[[:space:]]*?>/$2/"
 }
 
 fugitive_write_template() {
