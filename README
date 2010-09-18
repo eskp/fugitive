@@ -399,7 +399,7 @@ fugitive: README
 <h2 id="issues">Known issues</h2>
 <p>
   There seems to be some issues with the version of git provided in Debian
-  lenny (1.5.*), I didn't investigate it yet, and I don't know if I'll do it,
+  Lenny (1.5.*), I didn't investigate it yet, and I don't know if I'll do it,
   because at this time Squeeze is already frozen and git 1.7.* is available in
   the backports which are now officially supported by Debian.
 </p>
