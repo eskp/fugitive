@@ -374,3 +374,32 @@ fugitive: README
   The only difference between the archives.html and feed.xml templates is that
   in feed.xml these contsructs only loop on the five last articles and commits.
 </p>
+
+<h2 id="hacking">Hacking fugitive</h2>
+<p>
+  If you want to hack fugitive code to customize the behavior of the hooks, you
+  can either edit the hooks directly in your fugitive blog repository, or edit
+  them in the fugitive source code, then rebuild the <code>fugitive</code>
+  executable using the <code>build.sh</code> script provided in the source code
+  repository.
+</p>
+<p>
+  In the latter case and if you already have a fugitive blog running, you'll
+  need to install the new hooks. This can be done by running the command:<br />
+  <code>fugitive --install-hooks &lt;dir&gt;</code>, where &lt;dir&gt; is the
+  path to your fugitive blog repository, if it isn't specified then the current
+  working directory is used.
+</p>
+<p>
+  This can be handy if you decide for instance that you want to have the
+  last <em>n</em> articles on your index.html page rather than a mere copy of
+  the last article.
+</p>
+
+<h2 id="issues">Known issues</h2>
+<p>
+  There seems to be some issues with the version of git provided in Debian
+  lenny (1.5.*), I didn't investigate it yet, and I don't know if I'll do it,
+  because at this time Squeeze is already frozen and git 1.7.* is available in
+  the backports which are now officially supported by Debian.
+</p>
