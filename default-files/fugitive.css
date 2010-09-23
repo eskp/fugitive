@@ -36,7 +36,11 @@ nav {
   font-size: 1.3em;
 }
 nav ul { padding: 0; margin: 0; }
-nav ul.nav { float: right; }
+nav ul.nav {
+  float: right;
+  width: 50%;
+  text-align: right;
+}
 nav ul li { display: inline; }
 nav ul li:before { content: " — "; }
 nav ul li:first-child:before { content: ""; }
