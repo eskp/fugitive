@@ -35,20 +35,9 @@ EOF
   echo "done."
 }
 
-fugitive_install() {
-  DIR="."
-  if [ "$1" != "" ]; then DIR="$1"; fi
-  if [ ! -d "$DIR" ]; then mkdir -p "$DIR"; fi
-  cd "$DIR"
-  if [ -d ".git" ]; then
-    echo "There's already a git repository here, aborting install."
-    exit 1
-  fi
-  echo -n "Creating new git repository... "
-  git init >/dev/null
-  echo "done."
-  echo -n "Adding default settings to git config... "
-  if [ "$2" = "remote" ]; then
+fugitive_install_config() {
+  echo -n "Adding default fugitive settings to git config... "
+  if [ "$1" = "remote" ]; then
     git config --add receive.denyCurrentBranch "ignore"
   fi
   git config --add fugitive.blog-url ""
@@ -57,7 +46,19 @@ fugitive_install() {
   git config --add fugitive.public-dir "_public"
   git config --add fugitive.preproc ""
   echo "done."
-  fugitive_install_hooks
+
+}
+
+fugitive_install() {
+  if [ -d ".git" ]; then
+    echo "There's already a git repository here, aborting install."
+    exit 1
+  fi
+  echo -n "Creating new git repository... "
+  git init >/dev/null
+  echo "done."
+  fugitive_install_config
+  fugitive_install_hooks "$1"
   echo -n "Preventing git to track temporary and generated files... "
     cat >> .git/info/exclude <<EOF
 *~
@@ -66,7 +67,7 @@ _public/archives.html
 _public/feed.xml
 EOF
   echo "done."
-  if [ "$2" = "local" ]; then
+  if [ "$1" = "local" ]; then
     echo -n "Creating default directory tree... "
     mkdir -p _drafts _articles _templates _public
     echo "done."
@@ -104,12 +105,12 @@ EOF
 #INCLUDE:README#
 EOF
     git add _articles/fugitive-readme
-    git commit --no-verify -m "fugitive: README" >/dev/null
+    git commit --no-verify --author="p4bl0 <pablo@rauzy.name>" \
+      -m "fugitive: README" >/dev/null
     echo "done."
   fi
   echo "Installation complete, please set your blog url using"
   echo '`git config fugitive.blog-url "<url>"`.'
-  cd - >/dev/null
 }
 
 fugitive_usage() {
@@ -130,10 +131,16 @@ fugitive_help() {
   fugitive_usage
 }
 
+DIR="."
+if [ "$2" != "" ]; then DIR="$2"; fi
+if [ ! -d "$DIR" ]; then mkdir -p "$DIR"; fi
+cd "$DIR"
 case "$1" in
   "--help"|"-h") fugitive_help >&2;;
-  "--install"|"--install-local") fugitive_install "$2" "local";;
-  "--install-remote") fugitive_install "$2" "remote";;
-  "--install-hooks") fugitive_install_hooks;;
+  "--install"|"--install-local") fugitive_install "local";;
+  "--install-remote") fugitive_install "remote";;
+  "--install-hooks") fugitive_install_hooks ;;
+  "--install-config") fugitive_install_config "local";;
   *) fugitive_usage >&2;;
 esac
+cd - >/dev/null
