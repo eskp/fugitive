@@ -165,6 +165,8 @@ replace_commit_info() {
   commit_author=`get_commit_info "%an" "$1"`
   commit_author_email=`get_commit_info "%ae" "$1" | sanit_mail`
   commit_datetime=`get_commit_info "%ai" "$1"`
+  commit_datetime_html5=`echo "$commit_datetime" | \
+    sed "s/ /T/;s/ \(+\|-\)\([0-9][0-9]\)/\1\2:/"`
   commit_date=`echo $commit_datetime | cut -d' ' -f1`
   commit_time=`echo $commit_datetime | cut -d' ' -f2`
   commit_timestamp=`get_commit_info "%at" "$1"`
@@ -177,6 +179,7 @@ replace_commit_info() {
     replace_str "commit_author" "$commit_author" | \
     replace_str "commit_author_email" "$commit_author_email" | \
     replace_str "commit_datetime" "$commit_datetime" | \
+    replace_str "commit_datetime_html5" "$commit_datetime_html5" | \
     replace_str "commit_date" "$commit_date" | \
     replace_str "commit_time" "$commit_time" | \
     replace_str "commit_timestamp" "$commit_timestamp" | \
@@ -188,12 +191,16 @@ replace_commit_info() {
 replace_article_info() {
   article_title=`get_article_title "$1"`
   article_cdatetime=`get_article_info "%ai" "$1" | tail -1`
+  article_cdatetime_html5=`echo "$article_cdatetime" | \
+    sed "s/ /T/;s/ \(+\|-\)\([0-9][0-9]\)/\1\2:/"`
   article_cdate=`echo "$article_cdatetime" | cut -d' ' -f1`
   article_ctime=`echo "$article_cdatetime" | cut -d' ' -f2`
   article_ctimestamp=`get_article_info "%at" "$1" | tail -1`
   u=`get_article_info "%ai" "$1" | wc -l`
   article_mdatetime=`if test "$u" -gt 1; then get_article_info "%ai" "$1" | \
     head -1; fi`
+  article_mdatetime_html5=`echo "$article_mdatetime" | \
+    sed "s/ /T/;s/ \(+\|-\)\([0-9][0-9]\)/\1\2:/"`
   article_mdate=`echo "$article_mdatetime" | cut -d' ' -f1`
   article_mtime=`echo "$article_mdatetime" | cut -d' ' -f2`
   article_mtimestamp=`if test "$u" -gt 1; then get_article_info "%at" \
@@ -211,10 +218,12 @@ replace_article_info() {
     replace_str "article_file" "$1" | \
     replace_str "article_title" "$article_title" | \
     replace_str "article_cdatetime" "$article_cdatetime" | \
+    replace_str "article_cdatetime_html5" "$article_cdatetime_html5" | \
     replace_str "article_cdate" "$article_cdate" | \
     replace_str "article_ctime" "$article_ctime" | \
     replace_str "article_ctimestamp" "$article_ctimestamp" | \
     replace_str "article_mdatetime" "$article_mdatetime" | \
+    replace_str "article_mdatetime_html5" "$article_mdatetime_html5" | \
     replace_str "article_mdate" "$article_mdate" | \
     replace_str "article_mtime" "$article_mtime" | \
     replace_str "article_mtimestamp" "$article_mtimestamp" | \

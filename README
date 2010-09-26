@@ -231,6 +231,12 @@ fugitive: README
     Its value is the date and time of the last commit that provoked the
     (re)generation of the file.
   </dd>
+  <dt>commit_datetime_html5</dt>
+  <dd>
+    Its value is the date and time of the last commit that provoked the
+    (re)generation of the file, <em>but in an html5 <code>&lt;time&gt;</code>
+    compliant format</em>.
+  </dd>
   <dt>commit_date</dt>
   <dd>
     Its value is the date of the last commit that provoked the (re)generation
@@ -286,6 +292,11 @@ fugitive: README
     the <em>articles-dir</em> directory
     (see <a href="#config">configuration</a>)).
   </dd>
+  <dt>article_cdatetime_html5</dt>
+  <dd>
+    Same as previous, but in an html5 <code>&lt;time&gt;</code> compliant
+    format.
+  </dd>
   <dt>article_cdate</dt>
   <dd>
     Its value is the date of the publication of the article.
@@ -302,6 +313,11 @@ fugitive: README
   <dd>
     Its value is the date and time of the last modification of the article
     (the date of the last commit which changed the article file).
+  </dd>
+  <dt>article_mdatetime_html5</dt>
+  <dd>
+    Same as previous, but in an html5 <code>&lt;time&gt;</code> compliant
+    format.
   </dd>
   <dt>article_mdate</dt>
   <dd>

@@ -28,8 +28,10 @@
           powered by <a href="http://gitorious.org/fugitive">fugitive</a>
         </p>
         <p>
-          last build was <?fugitive commit_hash ?>
-          at <time><?fugitive commit_datetime ?></time>,<br />
+          last build was <?fugitive commit_hash ?> at
+          <time datetime="<?fugitive commit_datetime_html5 ?>">
+            <?fugitive commit_datetime ?>
+          </time>,<br />
           subject was <q><?fugitive commit_subject ?></q>
         </p>
       </footer>

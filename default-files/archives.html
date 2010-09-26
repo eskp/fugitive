@@ -7,7 +7,7 @@
           <dl>
             <?fugitive foreach:article ?>
             <dt>
-              <time datetime="<?fugitive article_cdatetime ?>">
+              <time datetime="<?fugitive article_cdatetime_html5 ?>">
                 <?fugitive article_cdate ?> at <?fugitive article_ctime ?>
               </time>
             </dt>
@@ -17,7 +17,7 @@
               </a>
               <?fugitive ifset:article_mdatetime ?>
               <br /><small>last update on
-                <time datetime="<?fugitive article_mdatetime ?>">
+                <time datetime="<?fugitive article_mdatetime_html5 ?>">
                   <?fugitive article_mdate ?> at <?fugitive article_mtime ?>
                 </time>
               </small>
