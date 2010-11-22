@@ -285,7 +285,7 @@ replace_foreach () {
 
 generate_article() {
   if [ "$preproc" != "" ]; then
-    preproc_bak=`mktemp -d "$articles_dir"`
+    preproc_bak=`mktemp -p "$articles_dir"`
     mv "$1" "$preproc_bak"
     ($preproc) < "$preproc_bak" > "$1"
   fi
