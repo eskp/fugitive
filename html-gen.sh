@@ -118,7 +118,7 @@ replace_condition() {
 }
 
 replace_str() {
-  esc=`echo $2 | sed 's/\//\\\\\//g'`
+  esc=`echo "$2" | sed 's/\//\\\\\//g;s/&/\\\&/g'`
   replace_condition "$1" "$2" | \
     sed "s/<?fugitive[[:space:]]\+$1[[:space:]]*?>/$esc/g"
 }
