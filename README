@@ -123,7 +123,7 @@ fugitive: README
 </p>
 <ul>
   <li>it generates static html files for newly added articles,</li>
-  <li>it regenerates static html files for modified artciles,</li>
+  <li>it regenerates static html files for modified articles,</li>
   <li>it deletes static html files for deleted articles,</li>
   <li>it regenerates static html files for articles that are just
   before and after newly added and deleted articles (this to maintain the
@@ -153,9 +153,9 @@ fugitive: README
 </p>
 <h3 id="templating">Template system</h3>
 <p>
-  The better explaination about the templates system is to see what the default
+  The better explanation about the templates system is to see what the default
   templates looks like. But since they do not use all the offered
-  possibilities, here are some more explainations...
+  possibilities, here are some more explanations...
 </p>
 <p>
   The fugitive template system uses xml preprocessor
@@ -388,7 +388,7 @@ fugitive: README
 &lt;<span class="keyword">?fugitive</span> endforeach:commit ?&gt;</pre>
 <p>
   The only difference between the archives.html and feed.xml templates is that
-  in feed.xml these contsructs only loop on the five last articles and commits.
+  in feed.xml these constructs only loop on the five last articles and commits.
 </p>
 
 <h2 id="hacking">Hacking fugitive</h2>
