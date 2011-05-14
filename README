@@ -189,7 +189,7 @@ fugitive: README
 &lt;<span class="keyword">?fugitive</span> endifset:<em>var</em> ?&gt;</pre>
 <p class="note">
   Not every variables can be used in the conditional construct, it is indicated
-  in the description od those which can't.
+  in the description of those which can't.
 </p>
 <p>The following variables are available everywhere:</p>
 <dl>
