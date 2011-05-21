@@ -12,15 +12,16 @@ preproc=`git config --get fugitive.preproc`
 tpl_change=`echo "$added_files" "$modified_files" "$deleted_files" | \
   grep -c "$templates_dir/"`
 if [ "$tpl_change" -gt 0 ]; then
-  added_files=
-  modified_files=`git log --name-status --pretty="format:" | \
+  first=`git log --format="%H" --reverse | head -1`
+  modified_files=`git log $first..HEAD^ --name-status --pretty="format:" | \
     grep -E '^A' | cut -f2 | sort | uniq`
   deleted_files=
   tmpart=`mktemp`
   tmpmod=`mktemp`
+  tmpadd=`mktemp`
   ls "$articles_dir"/* > "$tmpart"
   echo "$modified_files" | tr " " "\n" > "$tmpmod"
-  modified_files=`comm -12  --nocheck-order "$tmpmod" "$tmpart"`
+  modified_files=`comm -12 --nocheck-order "$tmpmod" "$tmpart"`
   rm "$tmpart" "$tmpmod"
   echo "[fugitive] Templates changed, regenerating everything..."
 fi
