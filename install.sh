@@ -105,7 +105,7 @@ EOF
 #INCLUDE:README#
 EOF
     git add _articles/fugitive-readme
-    git commit --no-verify --author="p4bl0 <pablo@rauzy.name>" \
+    git commit --no-verify --author="p4bl0 <r@uzy.me>" \
       -m "fugitive: README" >/dev/null
     echo "done."
   fi
