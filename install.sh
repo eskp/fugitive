@@ -46,7 +46,6 @@ fugitive_install_config() {
   git config --add fugitive.public-dir "_public"
   git config --add fugitive.preproc ""
   echo "done."
-
 }
 
 fugitive_install() {
@@ -57,7 +56,7 @@ fugitive_install() {
   echo -n "Creating new git repository... "
   git init >/dev/null
   echo "done."
-  fugitive_install_config
+  fugitive_install_config "$1"
   fugitive_install_hooks "$1"
   echo -n "Preventing git to track temporary and generated files... "
     cat >> .git/info/exclude <<EOF
