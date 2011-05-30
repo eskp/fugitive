@@ -46,7 +46,7 @@ for f in "$articles_dir"/* $deleted_files; do
   if [ "$ts" != "" ]; then
     echo "$ts ${f#$articles_dir/}"
   fi
-done | sort -nr | cut -d' ' -f2 > "$articles_sorted_with_delete"
+done | sort -k1,1nr | cut -d' ' -f2 > "$articles_sorted_with_delete"
 
 commits=`mktemp`
 git log --oneline | cut -d' ' -f1 > "$commits"
