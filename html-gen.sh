@@ -34,7 +34,7 @@ for f in "$articles_dir"/*; do
   if [ "$ts" != "" ]; then
     echo "$ts ${f#$articles_dir/}"
   fi
-done | sort -nr | cut -d' ' -f2 > "$articles_sorted"
+done | sort -k1,1nr | cut -d' ' -f2 > "$articles_sorted"
 
 if [ "`head -1 $articles_sorted`" = "" ]; then
   echo "[fugitive] WARNING: there's no article, errors may occur." >&2
