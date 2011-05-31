@@ -27,12 +27,14 @@
         <ul class="nav">
           <?fugitive ifset:article_previous_file ?>
           <li>
-            <a href="<?fugitive article_previous_file ?>.html">« previous</a>
+            <a href="<?fugitive article_previous_file ?>.html"
+               title="<?fugitive article_previous_title ?>">« previous</a>
           </li>
           <?fugitive endifset:article_previous_file ?>
           <?fugitive ifset:article_next_file ?>
           <li>
-            <a href="<?fugitive article_next_file ?>.html">next »</a>
+            <a href="<?fugitive article_next_file ?>.html"
+               title="<?fugitive article_next_title ?>">next »</a>
           </li>
           <?fugitive endifset:article_next_file ?>
         </ul>
