@@ -90,11 +90,11 @@ get_article_content() {
 }
 
 get_commit_info() {
-  git show --quiet --format="$1" "$2"
+  git show -s --format="$1" "$2"
 }
 get_commit_body() {
   tmp=`mktemp`
-  git show --quiet --format="%b" "$1" > "$tmp"
+  git show -s --format="%b" "$1" > "$tmp"
   if [ "`cat \"$tmp\" | sed \"/^$/d\" | wc -l`" != "0" ]; then
     echo "$tmp"
   fi
