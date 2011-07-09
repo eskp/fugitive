@@ -190,7 +190,7 @@ replace_commit_info() {
 }
 
 replace_article_info() {
-  article_title="$2"
+  article_title=`get_article_title "$1"`
   article_cdatetime=`get_article_info "%ai" "$1" | tail -1`
   article_cdatetime_html5=`echo "$article_cdatetime" | \
     sed "s/ /T/;s/ \(+\|-\)\([0-9][0-9]\)/\1\2:/"`
@@ -286,20 +286,24 @@ replace_foreach () {
 
 generate_article() {
   art="${1#$articles_dir/}"
-  article_title=`get_article_title "$art"`
+  title=`get_article_title "$art"`
   if [ "$preproc" != "" ]; then
-    preproc_bak=`mktemp -p "$articles_dir"`
-    mv "$1" "$preproc_bak"
-    ($preproc) < "$preproc_bak" > "$1"
+    body=`get_article_content "$art"`
+    echo "$title" > "$1"
+    ($preproc) < "$body" >> "$1"
   fi
   cat "$templates_dir/article.html" | \
     replace_includes | \
-    replace_str "page_title" "$article_title" | \
+    replace_str "page_title" "$title" | \
     replace_str "blog_url" "$blog_url" | \
     replace_commit_info "-1" | \
-    replace_article_info "$art" "$article_title" | \
+    replace_article_info "$art" | \
     sed "/^[[:space:]]*$/d" > "$public_dir/$art.html"
-  if [ "$preproc" != "" ]; then mv "$preproc_bak" "$1"; fi
+  if [ "$preproc" != "" ]; then
+    echo "$title" > "$1"
+    cat "$body" >> "$1"
+    rm "$body"
+  fi
 }
 
 regenerate_previous_and_next_article_maybe() {
