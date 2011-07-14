@@ -12,10 +12,10 @@ fugitive_write_template() {
 
 fugitive_install_hooks() {
   echo -n "Installing fugitive hooks scripts... "
-  (base64 -d | gunzip) >> .git/hooks/pre-commit <<EOF
+  (base64 -d | gunzip) > .git/hooks/pre-commit <<EOF
 #INCLUDE:pre-commit.sh#
 EOF
-  (base64 -d | gunzip) >> .git/hooks/pre-receive <<EOF
+  (base64 -d | gunzip) > .git/hooks/pre-receive <<EOF
 #INCLUDE:pre-receive.sh#
 EOF
   (base64 -d | gunzip) > .git/hooks/post-commit <<EOF
