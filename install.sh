@@ -50,8 +50,13 @@ fugitive_install_config() {
 
 fugitive_install() {
   if [ -d ".git" ]; then
-    echo "There's already a git repository here, aborting install."
-    exit 1
+    echo -n "There's already a git repository here, "
+    echo "enter 'yes' if you want to continue: "
+    read CONTINUE
+    if [ "$CONTINUE" != "yes" ]; then
+      echo "Okay, aborting."
+      exit 1
+    fi
   fi
   echo -n "Creating new git repository... "
   git init >/dev/null
