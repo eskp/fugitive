@@ -16,9 +16,8 @@ if [ "$tpl_change" -gt 0 ]; then
   modified_files=`git log $first..HEAD^ --name-status --pretty="format:" | \
     grep -E '^A' | cut -f2 | sort | uniq`
   deleted_files=
-  tmpart=`mktemp`
-  tmpmod=`mktemp`
-  tmpadd=`mktemp`
+  tmpart=`mktemp fugitiveXXXXXX`
+  tmpmod=`mktemp fugitiveXXXXXX`
   ls "$articles_dir"/* > "$tmpart"
   echo "$modified_files" | tr " " "\n" > "$tmpmod"
   modified_files=`comm -12 --nocheck-order "$tmpmod" "$tmpart"`
@@ -26,9 +25,9 @@ if [ "$tpl_change" -gt 0 ]; then
   echo "[fugitive] Templates changed, regenerating everything..."
 fi
 
-generated_files=`mktemp`
+generated_files=`mktemp fugitiveXXXXXX`
 
-articles_sorted=`mktemp`
+articles_sorted=`mktemp fugitiveXXXXXX`
 for f in "$articles_dir"/*; do
   ts=`git log --format="%at" -- "$f" | tail -1`
   if [ "$ts" != "" ]; then
@@ -40,7 +39,7 @@ if [ "`head -1 $articles_sorted`" = "" ]; then
   echo "[fugitive] WARNING: there's no article, errors may occur." >&2
 fi
 
-articles_sorted_with_delete=`mktemp`
+articles_sorted_with_delete=`mktemp fugitiveXXXXXX`
 for f in "$articles_dir"/* $deleted_files; do
   ts=`git log --format="%at" -- "$f" | tail -1`
   if [ "$ts" != "" ]; then
@@ -48,7 +47,7 @@ for f in "$articles_dir"/* $deleted_files; do
   fi
 done | sort -k1,1nr | cut -d' ' -f2 > "$articles_sorted_with_delete"
 
-commits=`mktemp`
+commits=`mktemp fugitiveXXXXXX`
 git log --oneline | cut -d' ' -f1 > "$commits"
 
 get_article_info() {
@@ -84,7 +83,7 @@ get_article_title() {
   fi
 }
 get_article_content() {
-  tmp=`mktemp`
+  tmp=`mktemp fugitiveXXXXXX`
   tail -n+2 "$articles_dir/$1" > "$tmp"
   echo "$tmp"
 }
@@ -93,10 +92,12 @@ get_commit_info() {
   git show -s --format="$1" "$2"
 }
 get_commit_body() {
-  tmp=`mktemp`
+  tmp=`mktemp fugitiveXXXXXX`
   git show -s --format="%b" "$1" > "$tmp"
   if [ "`cat \"$tmp\" | sed \"/^$/d\" | wc -l`" != "0" ]; then
     echo "$tmp"
+  else
+    rm "$tmp"
   fi
 }
 
@@ -138,8 +139,8 @@ replace_file() {
 }
 
 replace_includes() {
-  buf=`mktemp`
-  buf2=`mktemp`
+  buf=`mktemp fugitiveXXXXXX`
+  buf2=`mktemp fugitiveXXXXXX`
   cat > "$buf"
   includes=`cat "$buf" | \
     sed "s/<?fugitive[[:space:]]\+include:.\+[[:space:]]*?>/\n\0\n/g" | \
@@ -151,7 +152,8 @@ replace_includes() {
     cat "$buf" | \
       sed "/<?fugitive[[:space:]]\+include:$esc[[:space:]]*?>/ {
         r $inc
-        d }" > "$buf2"
+        d
+        }" > "$buf2"
     tmpbuf="$buf"
     buf="$buf2"
     buf2="$tmpbuf"
@@ -260,9 +262,9 @@ replace_empty_article_info() {
 }
 
 replace_foreach () {
-  foreach_body=`mktemp`
-  tmpfile=`mktemp`
-  temp=`mktemp`
+  foreach_body=`mktemp fugitiveXXXXXX`
+  tmpfile=`mktemp fugitiveXXXXXX`
+  temp=`mktemp fugitiveXXXXXX`
   fe="foreach:$1"
   cat > "$temp"
   cat "$temp" | \
@@ -379,9 +381,9 @@ if [ $modification -gt 0 ]; then
     sed "/^[[:space:]]*$/d" > "$public_dir/archives.html"
   echo "done."
   echo -n "[fugitive] Generating $public_dir/feed.xml... "
-  last_5_articles=`mktemp`
+  last_5_articles=`mktemp fugitiveXXXXXX`
   head -5 "$articles_sorted" > "$last_5_articles"
-  last_5_commits=`mktemp`
+  last_5_commits=`mktemp fugitiveXXXXXX`
   head -5 "$commits" > "$last_5_commits"
   cat "$templates_dir/feed.xml" | \
     replace_includes | \

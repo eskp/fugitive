@@ -23,10 +23,10 @@ modified_files=`git log $range --name-status --pretty="format:" | \
 deleted_files=`git log $range --name-status --pretty="format:" | \
   grep -E '^D' | cut -f2 | sort | uniq`
 
-tmpart=`mktemp`
-tmpadd=`mktemp`
-tmpmod=`mktemp`
-tmpdel=`mktemp`
+tmpart=`mktemp fugitiveXXXXXX`
+tmpadd=`mktemp fugitiveXXXXXX`
+tmpmod=`mktemp fugitiveXXXXXX`
+tmpdel=`mktemp fugitiveXXXXXX`
 ls "$articles_dir"/* > "$tmpart"
 echo "$added_files" | tr " " "\n" > "$tmpadd"
 echo "$modified_files" | tr " " "\n" > "$tmpmod"

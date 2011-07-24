@@ -2,11 +2,12 @@
 
 include_file() {
   f=`echo -n $2 | sed 's/\//\\\\\//g'`
-  tmp=`mktemp`
+  tmp=`mktemp fugitiveXXXXXX`
   cat "$2" | gzip | base64 > "$tmp"
   cat "$1" | sed "/#INCLUDE:$f#/ {
     r $tmp
-    d }"
+    d
+    }"
   rm "$tmp"
 }
 
