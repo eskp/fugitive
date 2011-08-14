@@ -57,10 +57,11 @@ fugitive_install() {
       echo "Okay, aborting."
       exit 1
     fi
+  else
+    echo -n "Creating new git repository... "
+    git init >/dev/null
+    echo "done."
   fi
-  echo -n "Creating new git repository... "
-  git init >/dev/null
-  echo "done."
   fugitive_install_config "$1"
   fugitive_install_hooks "$1"
   echo -n "Preventing git to track temporary and generated files... "
