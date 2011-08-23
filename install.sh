@@ -92,6 +92,9 @@ EOF
     fugitive_write_template > _templates/feed.xml <<EOF
 #INCLUDE:default-files/feed.xml#
 EOF
+    fugitive_write_template > _templates/index.html <<EOF
+#INCLUDE:default-files/index.html#
+EOF
     echo "done."
     echo -n "Writing default css files... "
     (base64 -d | gunzip) > _public/fugitive.css <<EOF

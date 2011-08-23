@@ -380,6 +380,8 @@ if [ $modification -gt 0 ]; then
     replace_commit_info "-1" | \
     sed "/^[[:space:]]*$/d" > "$public_dir/archives.html"
   echo "done."
+
+
   echo -n "[fugitive] Generating $public_dir/feed.xml... "
   last_5_articles=`mktemp fugitiveXXXXXX`
   head -5 "$articles_sorted" > "$last_5_articles"
@@ -394,10 +396,18 @@ if [ $modification -gt 0 ]; then
     replace_commit_info "-1" | \
     sed "/^[[:space:]]*$/d" > "$public_dir/feed.xml"
   echo "done."
+  echo -n "[fugitive] Generating $public_dir/index.html... "
+  cat "$templates_dir/index.html" | \
+    replace_includes | \
+    replace_foreach "article" "$last_5_articles" | \
+    replace_foreach "commit" "$last_5_commits" | \
+    replace_empty_article_info | \
+    replace_str "page_title" "index" | \
+    replace_str "blog_url" "$blog_url" | \
+    replace_commit_info "-1" | \
+    sed "/^[[:space:]]*$/d" > "$public_dir/index.html"
+  echo "done."
   rm "$last_5_articles" "$last_5_commits"
-  echo -n "[fugitive] Using last published article as index page... "
-  cp "$public_dir/`head -1 $articles_sorted`.html" "$public_dir/index.html"
-  echo "done".
   echo "[fugitive] Blog update complete."
 fi
 rm "$articles_sorted"

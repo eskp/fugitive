@@ -1,0 +1,29 @@
+<?fugitive include:top.html ?>
+<div>
+    <?fugitive foreach:article ?>
+      <article>
+        <header>
+          <h1><a href="<?fugitive article_file ?>.html">
+              <?fugitive article_title ?>
+          </a></h1>
+        </header>
+        <footer>
+          by <?fugitive article_cauthor ?>, on
+          <time datetime="<?fugitive article_cdatetime_html5 ?>">
+            <?fugitive article_cdate ?> at <?fugitive article_ctime ?>
+          </time>
+          <?fugitive ifset:article_mdatetime ?>
+          <br /><small>last update by <?fugitive article_mauthor ?>, on
+            <time datetime="<?fugitive article_mdatetime_html5 ?>">
+              <?fugitive article_mdate ?> at <?fugitive article_mtime ?>
+            </time>
+          </small>
+          <?fugitive endifset:article_mdatetime ?>
+        </footer>
+        <div>
+          <?fugitive article_content ?>
+        </div>
+      </article>
+    <?fugitive endforeach:article ?>
+</div>
+<?fugitive include:bottom.html ?>
