@@ -299,8 +299,7 @@ generate_article() {
     replace_str "page_title" "$title" | \
     replace_str "blog_url" "$blog_url" | \
     replace_commit_info "-1" | \
-    replace_article_info "$art" | \
-    sed "/^[[:space:]]*$/d" > "$public_dir/$art.html"
+    replace_article_info "$art" > "$public_dir/$art.html"
   if [ "$preproc" != "" ]; then
     echo "$title" > "$1"
     cat "$body" >> "$1"
@@ -377,8 +376,7 @@ if [ $modification -gt 0 ]; then
     replace_empty_article_info | \
     replace_str "page_title" "archives" | \
     replace_str "blog_url" "$blog_url" | \
-    replace_commit_info "-1" | \
-    sed "/^[[:space:]]*$/d" > "$public_dir/archives.html"
+    replace_commit_info "-1" > "$public_dir/archives.html"
   echo "done."
   echo -n "[fugitive] Generating $public_dir/feed.xml... "
   last_5_articles=`mktemp fugitiveXXXXXX`
@@ -391,8 +389,7 @@ if [ $modification -gt 0 ]; then
     replace_foreach "commit" "$last_5_commits" | \
     replace_str "page_title" "feed" | \
     replace_str "blog_url" "$blog_url" | \
-    replace_commit_info "-1" | \
-    sed "/^[[:space:]]*$/d" > "$public_dir/feed.xml"
+    replace_commit_info "-1" > "$public_dir/feed.xml"
   echo "done."
   rm "$last_5_articles" "$last_5_commits"
   echo -n "[fugitive] Using last published article as index page... "
