@@ -8,6 +8,7 @@ public_dir=`git config --get fugitive.public-dir`
 if [ ! -d "$public_dir" ]; then mkdir -p "$public_dir"; fi
 articles_dir=`git config --get fugitive.articles-dir`
 preproc=`git config --get fugitive.preproc`
+if [ "$preproc" = "" ]; then preproc="cat"; fi
 
 tpl_change=`echo "$added_files" "$modified_files" "$deleted_files" | \
   grep -c "$templates_dir/"`
@@ -84,7 +85,7 @@ get_article_title() {
 }
 get_article_content() {
   tmp=`mktemp fugitiveXXXXXX`
-  tail -n+2 "$articles_dir/$1" > "$tmp"
+  tail -n+2 "$articles_dir/$1" | ($preproc) > "$tmp"
   echo "$tmp"
 }
 
@@ -289,23 +290,12 @@ replace_foreach () {
 generate_article() {
   art="${1#$articles_dir/}"
   title=`get_article_title "$art"`
-  if [ "$preproc" != "" ]; then
-    body=`get_article_content "$art"`
-    echo "$title" > "$1"
-    ($preproc) < "$body" >> "$1"
-  fi
   cat "$templates_dir/article.html" | \
     replace_includes | \
     replace_str "page_title" "$title" | \
     replace_str "blog_url" "$blog_url" | \
     replace_commit_info "-1" | \
-    replace_article_info "$art" | \
-    sed "/^[[:space:]]*$/d" > "$public_dir/$art.html"
-  if [ "$preproc" != "" ]; then
-    echo "$title" > "$1"
-    cat "$body" >> "$1"
-    rm "$body"
-  fi
+    replace_article_info "$art" > "$public_dir/$art.html"
 }
 
 regenerate_previous_and_next_article_maybe() {
@@ -377,8 +367,7 @@ if [ $modification -gt 0 ]; then
     replace_empty_article_info | \
     replace_str "page_title" "archives" | \
     replace_str "blog_url" "$blog_url" | \
-    replace_commit_info "-1" | \
-    sed "/^[[:space:]]*$/d" > "$public_dir/archives.html"
+    replace_commit_info "-1" > "$public_dir/archives.html"
   echo "done."
 
 
@@ -393,8 +382,7 @@ if [ $modification -gt 0 ]; then
     replace_foreach "commit" "$last_5_commits" | \
     replace_str "page_title" "feed" | \
     replace_str "blog_url" "$blog_url" | \
-    replace_commit_info "-1" | \
-    sed "/^[[:space:]]*$/d" > "$public_dir/feed.xml"
+    replace_commit_info "-1" > "$public_dir/feed.xml"
   echo "done."
   echo -n "[fugitive] Generating $public_dir/index.html... "
   cat "$templates_dir/index.html" | \
