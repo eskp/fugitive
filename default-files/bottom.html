@@ -1,40 +1,21 @@
-      <nav>
-        <?fugitive ifset:article_file ?>
-        <ul class="nav">
-          <?fugitive ifset:article_previous_file ?>
-          <li>
-            <a href="<?fugitive article_previous_file ?>.html"
-               title="<?fugitive article_previous_title ?>">« previous</a>
-          </li>
-          <?fugitive endifset:article_previous_file ?>
-          <?fugitive ifset:article_next_file ?>
-          <li>
-            <a href="<?fugitive article_next_file ?>.html"
-               title="<?fugitive article_next_title ?>">next »</a>
-          </li>
-          <?fugitive endifset:article_next_file ?>
-        </ul>
-        <?fugitive endifset:article_file ?>
+        <nav id="botnav">
         <ul>
-          <li><a href="#topnav">top&uarr;</a></li>
-          <li><a href="index.html">home</a></li>
-          <li><a href="archives.html">archives</a></li>
+          <li><a href="#top">top&uarr;</a></li>
         </ul>
-      </nav>
+        </nav>
       <footer>
         <p>
           <a href="http://www.gnu.org/copyleft/copyleft.html">copyleft</a>
-          <a href="<?fugitive blog_url ?>"><?fugitive-install name ?></a>
-          <?fugitive-install year ?>
+          <a href="http://eskp.net">eskp</a>
+          2011
           &mdash;
           powered by <a href="http://gitorious.org/fugitive">fugitive</a>
         </p>
         <p>
-          last build was <?fugitive commit_hash ?> at
+          last updated on
           <time datetime="<?fugitive commit_datetime_html5 ?>">
             <?fugitive commit_datetime ?>
-          </time>,<br />
-          subject was <q><?fugitive commit_subject ?></q>
+          </time><br />
         </p>
       </footer>
     </div>

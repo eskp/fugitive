@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
   <head>
-    <title><?fugitive-install name ?>'s blog: <?fugitive page_title ?></title>
+    <title>eskp's blog: <?fugitive page_title ?></title>
     <meta http-equiv="Content-type" content="application/xhtml+xml; charset=utf-8" />
-    <meta name="author" content="<?fugitive-install name ?>" />
-    <meta name="description" content="<?fugitive-install name ?>'s blog" />
+    <meta name="author" content="eskp" />
+    <meta name="description" content="eskp's blog" />
     <link rel="alternate" type="application/rss+xml" href="<?fugitive blog_url ?>feed.xml" title="5 last articles RSS feed" />
     <link rel="stylesheet" href="fugitive.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="print.css" type="text/css" media="print" />
@@ -20,32 +20,40 @@
     <?fugitive endifset:article_next_file ?>
   </head>
   <body>
-    <div id="container">
-      <nav id="topnav">
-        <?fugitive ifset:article_file ?>
-        <ul class="nav">
-          <?fugitive ifset:article_previous_file ?>
-          <li>
-            <a href="<?fugitive article_previous_file ?>.html"
-               title="<?fugitive article_previous_title ?>">« previous</a>
-          </li>
-          <?fugitive endifset:article_previous_file ?>
-          <?fugitive ifset:article_next_file ?>
-          <li>
-            <a href="<?fugitive article_next_file ?>.html"
-               title="<?fugitive article_next_title ?>">next »</a>
-          </li>
-          <?fugitive endifset:article_next_file ?>
-        </ul>
-        <?fugitive endifset:article_file ?>
-        <ul>
-          <li><a href="index.html">home</a></li>
-          <li><a href="archives.html">archives</a></li>
-        </ul>
-      </nav>
-      <header>
-        <h1><a href="<?fugitive blog_url ?>">
-            <?fugitive-install name ?>'s blog
-        </a></h1>
-        <q>Don't learn to hack, hack to learn.</q>
-      </header>
+      <div id="top"></div>
+      <div id="container">
+          <div id="side">
+          <nav id="topnav">
+            <ul>
+              <li><a href="index.html">last5</a></li>
+              <li><a href="archives.html">all</a></li>
+              <li><a href="http://eskp.net">eskp.net</a></li>
+              <li><a href="/feed.xml"><img src="/rss.gif"
+                  width="36" height="14"></a></li>
+            </ul>
+           </nav>
+          <header>
+            <h1><a href="<?fugitive blog_url ?>">
+                eskp's blog
+            </a></h1>
+            <q>Don't learn to hack, hack to learn.</q>
+          </header>
+            <?fugitive ifset:article_file ?>
+            <?fugitive ifset:article_previous_file ?>
+            <nav id="nextprev">
+            <ul>
+              <li>
+                <a href="<?fugitive article_previous_file ?>.html"
+                   title="<?fugitive article_previous_title ?>">« previous</a>
+              </li>
+              <?fugitive endifset:article_previous_file ?>
+              <?fugitive ifset:article_next_file ?>
+              <li>
+                <a href="<?fugitive article_next_file ?>.html"
+                   title="<?fugitive article_next_title ?>">next »</a>
+              </li>
+            </ul>
+            </nav>
+            <?fugitive endifset:article_next_file ?>
+            <?fugitive endifset:article_file ?>
+        </div>
